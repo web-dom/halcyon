@@ -2,12 +2,13 @@ use crate::extensions::attributes::Attributes;
 use crate::extensions::Extension;
 use std::cell::RefCell;
 use std::rc::Rc;
+use crate::dom::{MemoryDOM,MemoryElement,Element,DOM};
 mod extensions;
-
-type Element = i32;
+mod dom;
 
 pub struct Halcyon {
-    current_vnode: VirtualNode,
+    api:Box<DOM>,
+    current_vnode: RefCell<Option<VirtualNode>>,
     pre_handlers: Vec<Rc<RefCell<Box<PreHandler>>>>,
     init_handlers: Vec<Rc<RefCell<Box<InitHandler>>>>,
     create_handlers: Vec<Rc<RefCell<Box<CreateHandler>>>>,
@@ -74,9 +75,10 @@ post	the patch process is done	none
 */
 
 impl Halcyon {
-    pub fn new() -> Halcyon {
+    pub fn new(api:Box<DOM>) -> Halcyon {
         Halcyon {
-            current_vnode: VirtualNode::Empty,
+            api:api,
+            current_vnode: RefCell::new(None),
             pre_handlers: Vec::new(),
             init_handlers: Vec::new(),
             create_handlers: Vec::new(),
@@ -90,6 +92,14 @@ impl Halcyon {
         }
     }
 
+    pub fn has_patched(&self) -> bool {
+        let mut c = self.current_vnode.borrow();
+        if let None = *c {
+            return false;
+        }
+        return true;
+    }
+
     pub fn add_extensions(halcyon:&'static std::thread::LocalKey<Halcyon>, extensions:Vec<Box<Extension>>){
         for e in extensions.iter() {
             e.attach_hooks(&halcyon);
@@ -97,7 +107,13 @@ impl Halcyon {
     }
 
     pub fn patch(&self, new_vnode:VirtualNode){
+        let mut c = self.current_vnode.borrow_mut();
+        if let None = *c {
+            *c = Some(new_vnode);
+            return;
+        }
 
+        *c = Some(new_vnode);
     }
 
     pub fn add_pre_hook_handler(&self, handler:Box<PreHandler>){
@@ -142,32 +158,85 @@ impl Halcyon {
 }
 
 pub enum VirtualNode {
-    Empty,
-    Element(VirtualNodeElement)
+    Element(VirtualNodeElement),
+    Text(VirtualNodeText)
 }
+
+impl VirtualNode {
+    fn from_element(e:Rc<RefCell<Element>>) -> VirtualNode{
+        VirtualNode::Element(VirtualNodeElement{
+            selector:String::from("div"),
+            data:None,
+            children:None,
+            element:Some(e),
+            list_key:None
+        })
+    }
+}
+
+type VirtualNodeData = i32;
+type Key = i32;
 
 pub struct VirtualNodeElement {
-
+    selector:String,
+    data:Option<VirtualNodeData>,
+    children:Option<Vec<VirtualNode>>,
+    element:Option<Rc<RefCell<Element>>>,
+    list_key:Option<Key>
 }
 
-pub fn h() -> VirtualNode {
-    VirtualNode::Element(VirtualNodeElement{})
+pub struct VirtualNodeText {
+    element:Option<Rc<RefCell<Element>>>,
+    text:String
+}
+
+pub fn h(selector:&str,data:Option<VirtualNodeData>,children:Option<Vec<VirtualNode>>) -> VirtualNode {
+    VirtualNode::Element(VirtualNodeElement{
+        selector:String::from(selector),
+        data:data,
+        children:children,
+        element:None,
+        list_key:None
+    })
+}
+
+pub fn t(text:&str) -> VirtualNode {
+    VirtualNode::Text(VirtualNodeText{
+        element:None,
+        text:String::from(text)
+    })
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
+    fn render(element:Rc<RefCell<Element>>,container:VirtualNode){
+        thread_local!{
+            static HALCYON:Halcyon = Halcyon::new(MemoryDOM::new());
+        };
+        HALCYON.with(|halcyon|{
+            if !halcyon.has_patched() {
+                halcyon.patch(VirtualNode::from_element(element));
+            }
+            halcyon.patch(container);
+        });
+    }
+
+    fn hello_world(name:Option<&str>) -> VirtualNode {
+        let n = match name {
+            Some(v) => v,
+            _ => "World",
+        };
+        h("div",None,Some(vec![
+            t(&format!("Hello {}",n))
+            ]))
+    }
+
     #[test]
     fn it_works() {
-        thread_local!{
-            static HALCYON:Halcyon = Halcyon::new();
-        };
-        Halcyon::add_extensions(&HALCYON,vec![
-            Attributes::new()
-        ]);
-        HALCYON.with(|halcyon|{
-            halcyon.patch(h());
-        })
+        let body = MemoryElement::new("body");
+        render(body.clone(),hello_world(None));
+        render(body.clone(),hello_world(Some("Richard")));
     }
 }
