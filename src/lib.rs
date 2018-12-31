@@ -204,8 +204,15 @@ mod tests {
         };
         HALCYON.with(|halcyon| {
             if !halcyon.has_patched() {
+                // If it's our first time
+                // Add our extensions
+                Halcyon::add_extensions(&HALCYON,vec![
+                    Attributes::new()
+                    ]);
+                // Render the existing element
                 halcyon.patch(VirtualNode::from_element(element));
             }
+            // Render the new virtual dom
             halcyon.patch(container);
         });
     }
