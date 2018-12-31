@@ -206,9 +206,7 @@ mod tests {
             if !halcyon.has_patched() {
                 // If it's our first time
                 // Add our extensions
-                Halcyon::add_extensions(&HALCYON,vec![
-                    Attributes::new()
-                    ]);
+                Halcyon::add_extensions(&HALCYON, vec![Attributes::new()]);
                 // Render the existing element
                 halcyon.patch(VirtualNode::from_element(element));
             }
