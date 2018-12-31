@@ -1,5 +1,5 @@
 use crate::extensions::Extension;
-use crate::{VNode,Halcyon,UpdateHandler,CreateHandler};
+use crate::{VirtualNode,Halcyon,UpdateHandler,CreateHandler};
 pub struct Attributes {}
 
 impl Extension for Attributes {
@@ -10,18 +10,18 @@ impl Extension for Attributes {
     }
 }
 
-fn update_attributes(old_vnode:&VNode,new_vnode:&VNode){
+fn update_attributes(old_vnode:&VirtualNode,new_vnode:&VirtualNode){
 
 }
 
 impl CreateHandler for Attributes {
-    fn handle(&self,old_vnode:&VNode,new_vnode:&VNode){
+    fn handle(&self,old_vnode:&VirtualNode,new_vnode:&VirtualNode){
         update_attributes(old_vnode,new_vnode);
     }
 }
 
 impl UpdateHandler for Attributes {
-    fn handle(&self,old_vnode:&VNode,new_vnode:&VNode){
+    fn handle(&self,old_vnode:&VirtualNode,new_vnode:&VirtualNode){
         update_attributes(old_vnode,new_vnode);
     }
 }

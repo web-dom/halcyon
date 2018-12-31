@@ -7,8 +7,7 @@ mod extensions;
 type Element = i32;
 
 pub struct Halcyon {
-    target_element: Element,
-    current_vnode: VNode,
+    current_vnode: VirtualNode,
     pre_handlers: Vec<Rc<RefCell<Box<PreHandler>>>>,
     init_handlers: Vec<Rc<RefCell<Box<InitHandler>>>>,
     create_handlers: Vec<Rc<RefCell<Box<CreateHandler>>>>,
@@ -26,35 +25,35 @@ trait PreHandler {
 }
 
 trait InitHandler {
-    fn handle(&self,vnode:&VNode);
+    fn handle(&self,vnode:&VirtualNode);
 }
 
 trait CreateHandler {
-    fn handle(&self,empty_vnode:&VNode,new_vnode:&VNode);
+    fn handle(&self,empty_vnode:&VirtualNode,new_vnode:&VirtualNode);
 }
 
 trait InsertHandler {
-    fn handle(&self,vnode:&VNode);
+    fn handle(&self,vnode:&VirtualNode);
 }
 
 trait PrePatchHandler {
-    fn handle(&self,old_vnode:&VNode,new_vnode:&VNode);
+    fn handle(&self,old_vnode:&VirtualNode,new_vnode:&VirtualNode);
 }
 
 trait UpdateHandler {
-    fn handle(&self,old_vnode:&VNode,new_vnode:&VNode);
+    fn handle(&self,old_vnode:&VirtualNode,new_vnode:&VirtualNode);
 }
 
 trait PostPatchHandler {
-    fn handle(&self,old_vnode:&VNode,new_vnode:&VNode);
+    fn handle(&self,old_vnode:&VirtualNode,new_vnode:&VirtualNode);
 }
 
 trait DestroyHandler {
-    fn handle(&self,vnode:&VNode);
+    fn handle(&self,vnode:&VirtualNode);
 }
 
 trait RemoveHandler {
-    fn handle(&self,vnode:&VNode);
+    fn handle(&self,vnode:&VirtualNode);
 }
 
 trait PostHandler {
@@ -63,22 +62,21 @@ trait PostHandler {
 
 /*
 pre	the patch process begins	none
-init	a vnode has been added	vnode
-create	a DOM element has been created based on a vnode	emptyVnode, vnode
-insert	an element has been inserted into the DOM	vnode
-prepatch	an element is about to be patched	oldVnode, vnode
-update	an element is being updated	oldVnode, vnode
-postpatch	an element has been patched	oldVnode, vnode
-destroy	an element is directly or indirectly being removed	vnode
-remove	an element is directly being removed from the DOM	vnode, removeCallback
+init	a VirtualNode has been added	VirtualNode
+create	a DOM element has been created based on a VirtualNode	emptyVnode, VirtualNode
+insert	an element has been inserted into the DOM	VirtualNode
+prepatch	an element is about to be patched	oldVnode, VirtualNode
+update	an element is being updated	oldVnode, VirtualNode
+postpatch	an element has been patched	oldVnode, VirtualNode
+destroy	an element is directly or indirectly being removed	VirtualNode
+remove	an element is directly being removed from the DOM	VirtualNode, removeCallback
 post	the patch process is done	none
 */
 
 impl Halcyon {
-    pub fn new(target_element:Element) -> Halcyon {
+    pub fn new() -> Halcyon {
         Halcyon {
-            current_vnode: VNode{},
-            target_element: target_element,
+            current_vnode: VirtualNode::Empty,
             pre_handlers: Vec::new(),
             init_handlers: Vec::new(),
             create_handlers: Vec::new(),
@@ -98,7 +96,7 @@ impl Halcyon {
         }
     }
 
-    pub fn patch(&self, new_vnode:VNode){
+    pub fn patch(&self, new_vnode:VirtualNode){
 
     }
 
@@ -143,12 +141,17 @@ impl Halcyon {
     }
 }
 
-pub struct VNode {
+pub enum VirtualNode {
+    Empty,
+    Element(VirtualNodeElement)
+}
+
+pub struct VirtualNodeElement {
 
 }
 
-pub fn h() -> VNode {
-    VNode{}
+pub fn h() -> VirtualNode {
+    VirtualNode::Element(VirtualNodeElement{})
 }
 
 #[cfg(test)]
@@ -158,7 +161,7 @@ mod tests {
     #[test]
     fn it_works() {
         thread_local!{
-            static HALCYON:Halcyon = Halcyon::new(0);
+            static HALCYON:Halcyon = Halcyon::new();
         };
         Halcyon::add_extensions(&HALCYON,vec![
             Attributes::new()
