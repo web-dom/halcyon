@@ -30,15 +30,15 @@ impl Halcyon {
     }
 
     pub fn patch(&self, new_vnode: VirtualNode) {
-        for e in self.extensions.iter() {
-            e.pre();
-        }
         let mut c = self.current_vnode.borrow_mut();
         if let None = *c {
             *c = Some(new_vnode);
             return;
         }
 
+        for e in self.extensions.iter() {
+            e.pre();
+        }
         *c = Some(new_vnode);
         for e in self.extensions.iter() {
             e.post();

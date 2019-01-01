@@ -4,7 +4,7 @@ pub struct Attributes {}
 
 impl Extension for Attributes {
     fn pre(&self){
-        println!("started")
+        println!("Attributes Extension::started")
     }
     fn create(&self, old_vnode: &VirtualNode, new_vnode: &VirtualNode) {
         update_attributes(old_vnode, new_vnode);
@@ -13,7 +13,7 @@ impl Extension for Attributes {
         update_attributes(old_vnode, new_vnode);
     }
     fn post(&self){
-        println!("ended")
+        println!("Attributes Extension::ended")
     }
 }
 
