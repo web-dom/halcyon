@@ -1,14 +1,16 @@
 use std::cell::RefCell;
 use std::rc::Rc;
+use std::fmt::Debug;
 
-pub trait Element {
+pub trait Element: Debug {
     fn get_tag(&self) -> String;
 }
 
-pub trait DOM {
+pub trait DOM:Debug {
     fn query_selector(&self, selector: &str) -> Rc<RefCell<Element>>;
 }
 
+#[derive(Debug)]
 pub struct MemoryDOM {}
 
 impl MemoryDOM {
@@ -17,6 +19,7 @@ impl MemoryDOM {
     }
 }
 
+#[derive(Debug)]
 pub struct MemoryElement {
     tag: String,
 }

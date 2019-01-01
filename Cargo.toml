@@ -1,7 +1,6 @@
-[package]
-name = "halcyon"
-version = "0.1.0"
-authors = ["Richard <Richard>"]
-edition = "2018"
+[workspace]
 
-[dependencies]
+members = [
+    "halcyon",
+    "halcyon-dom",
+]

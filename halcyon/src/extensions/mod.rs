@@ -1,5 +1,6 @@
 use crate::Halcyon;
 use crate::VirtualNode;
+use std::fmt::Debug;
 
 /*
 pre	the patch process begins	none
@@ -14,7 +15,7 @@ remove	an element is directly being removed from the DOM	VirtualNode, removeCall
 post	the patch process is done	none
 */
 
-pub trait Extension {
+pub trait Extension : Debug {
     fn pre(&self) {}
     fn init(&self, vnode: &VirtualNode) {}
     fn create(&self, empty_vnode: &VirtualNode, new_vnode: &VirtualNode) {}

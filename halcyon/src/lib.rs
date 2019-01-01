@@ -6,6 +6,7 @@ use std::rc::Rc;
 mod dom;
 mod extensions;
 
+#[derive(Debug)]
 pub struct Halcyon {
     api: Box<DOM>,
     current_vnode: RefCell<Option<VirtualNode>>,
@@ -46,6 +47,7 @@ impl Halcyon {
     }
 }
 
+#[derive(Debug)]
 pub enum VirtualNode {
     Element(VirtualNodeElement),
     Text(VirtualNodeText),
@@ -66,6 +68,7 @@ impl VirtualNode {
 type VirtualNodeData = i32;
 type Key = i32;
 
+#[derive(Debug)]
 pub struct VirtualNodeElement {
     selector: String,
     data: Option<VirtualNodeData>,
@@ -74,6 +77,7 @@ pub struct VirtualNodeElement {
     list_key: Option<Key>,
 }
 
+#[derive(Debug)]
 pub struct VirtualNodeText {
     element: Option<Rc<RefCell<Element>>>,
     text: String,
@@ -116,6 +120,7 @@ mod tests {
             }
             // Render the new virtual dom
             halcyon.patch(container);
+            println!("{:?}",halcyon);
         });
     }
 

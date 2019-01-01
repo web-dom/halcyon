@@ -1,5 +1,7 @@
 use crate::extensions::Extension;
 use crate::VirtualNode;
+
+#[derive(Debug)]
 pub struct Attributes {}
 
 impl Extension for Attributes {
