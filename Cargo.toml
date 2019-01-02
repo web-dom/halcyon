@@ -3,4 +3,5 @@
 members = [
     "halcyon",
     "halcyon_dom",
+    "halcyon_macro",
 ]
