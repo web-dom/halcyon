@@ -3,5 +3,7 @@ name = "halcyon_dom"
 version = "0.0.1"
 authors = ["Richard Anaya"]
 edition = "2018"
+description = "An implementation of halcyon's DOM api for wasm-bindgen"
+license = "MIT"
 
 [dependencies]

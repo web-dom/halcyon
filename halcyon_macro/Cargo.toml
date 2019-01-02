@@ -3,5 +3,7 @@ name = "halcyon_macro"
 version = "0.0.1"
 authors = ["Richard Anaya"]
 edition = "2018"
+description = "Helper macros for halcyon"
+license = "MIT"
 
 [dependencies]
