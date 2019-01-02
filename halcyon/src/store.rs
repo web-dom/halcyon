@@ -1,7 +1,6 @@
 use std::cell::RefCell;
 use std::marker::PhantomData;
 use std::rc::Rc;
-use virtual_dom_rs::VirtualNode;
 
 pub trait Reducer<P> {
     fn reduce(&self, action: P) -> Option<Self>
@@ -13,7 +12,7 @@ pub struct Store<T, P>
 where
     T: Clone,
 {
-    state: Rc<RefCell<T>>,
+    pub state: Rc<RefCell<T>>,
     listeners: Rc<RefCell<Vec<Box<Fn()>>>>,
     _p: PhantomData<P>,
 }

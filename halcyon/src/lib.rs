@@ -5,6 +5,10 @@ use std::cell::RefCell;
 use std::rc::Rc;
 mod dom;
 mod extensions;
+mod store;
+
+pub use crate::store::Reducer;
+pub use crate::store::Store;
 
 #[derive(Debug)]
 pub struct Halcyon {
