@@ -1,12 +1,20 @@
 #[macro_use]
+#[allow(unused_imports)]
 extern crate halcyon;
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     #[test]
     fn it_works() {
-        let a = html!(abs);
-        println!("{}",a);
+        let _abc = 123;
+        let a = html! {
+            <div a="hello.test" b={} c>
+                    <div/>
+                    <div h="sdf" a={||{test}}>
+                        {test}
+                    </div>
+            </div>
+        };
+        println!("{}", a);
     }
 }

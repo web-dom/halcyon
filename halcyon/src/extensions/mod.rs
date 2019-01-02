@@ -17,14 +17,14 @@ post	the patch process is done	none
 
 pub trait Extension: Debug {
     fn pre(&self) {}
-    fn init(&self, vnode: &VirtualNode) {}
-    fn create(&self, empty_vnode: &VirtualNode, new_vnode: &VirtualNode) {}
-    fn insert(&self, vnode: &VirtualNode) {}
-    fn pre_patch(&self, old_vnode: &VirtualNode, new_vnode: &VirtualNode) {}
-    fn update(&self, old_vnode: &VirtualNode, new_vnode: &VirtualNode) {}
-    fn handle(&self, old_vnode: &VirtualNode, new_vnode: &VirtualNode) {}
-    fn destroy(&self, vnode: &VirtualNode) {}
-    fn remove(&self, vnode: &VirtualNode) {}
+    fn init(&self, _vnode: &VirtualNode) {}
+    fn create(&self, _empty_vnode: &VirtualNode, _new_vnode: &VirtualNode) {}
+    fn insert(&self, _vnode: &VirtualNode) {}
+    fn pre_patch(&self, _old_vnode: &VirtualNode, _new_vnode: &VirtualNode) {}
+    fn update(&self, _old_vnode: &VirtualNode, _new_vnode: &VirtualNode) {}
+    fn handle(&self, _old_vnode: &VirtualNode, _new_vnode: &VirtualNode) {}
+    fn destroy(&self, _vnode: &VirtualNode) {}
+    fn remove(&self, _vnode: &VirtualNode) {}
     fn post(&self) {}
 }
 
