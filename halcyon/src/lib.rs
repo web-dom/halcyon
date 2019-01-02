@@ -124,7 +124,7 @@ mod tests {
             }
             // Render the new virtual dom
             halcyon.patch(container);
-            println!("{:?}",halcyon);
+            println!("{:?}", halcyon);
         });
     }
 
