@@ -1,8 +1,8 @@
-use std::rc::Rc;
+#[allow(unused_imports)]
+use halcyon::{Reducer, Store};
 #[allow(unused_imports)]
 use std::cell::RefCell;
-#[allow(unused_imports)]
-use halcyon::{Store,Reducer};
+use std::rc::Rc;
 
 pub struct Counter {
     pub count: i32,
@@ -41,7 +41,7 @@ mod tests {
     fn it_works() {
         // Create a store and put our initial state in it
         thread_local!(static STORE : RefCell<Store<Rc<Counter>, Actions>> = RefCell::new(Store::new(Rc::new(Counter::new()))));
-        STORE.with(|store|{
+        STORE.with(|store| {
             // get a reference of the static store
             let store_ref = store.borrow();
             // dispatch your action to increment
