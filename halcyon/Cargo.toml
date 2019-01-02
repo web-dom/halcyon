@@ -7,3 +7,5 @@ description = "A modular virtual DOM library"
 license = "MIT"
 
 [dependencies]
+halcyon_macro = {path="../halcyon_macro"}
+proc-macro-hack = "0.5"
