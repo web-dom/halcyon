@@ -4,5 +4,6 @@ version = "0.0.1"
 authors = ["Richard Anaya"]
 edition = "2018"
 description = "A modular virtual DOM library"
+license = "MIT"
 
 [dependencies]
