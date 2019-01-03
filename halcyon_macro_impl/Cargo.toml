@@ -1,12 +1,14 @@
 [package]
-name = "halcyon_macro"
+name = "halcyon_macro_impl"
 version = "0.0.1"
 authors = ["Richard Anaya"]
 edition = "2018"
 
 
 [lib]
+proc-macro = true
 
 [dependencies]
 proc-macro-hack = "0.5"
-halcyon_macro_impl = {path="../halcyon_macro_impl"}
+quote = "0.6"
+syn = { version = "0.15", features = ["full"] }

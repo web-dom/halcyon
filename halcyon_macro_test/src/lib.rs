@@ -1,6 +1,8 @@
-#[macro_use]
 #[allow(unused_imports)]
 extern crate halcyon;
+#[macro_use]
+#[allow(unused_imports)]
+extern crate halcyon_macro;
 
 #[cfg(test)]
 mod tests {

@@ -4,6 +4,7 @@ members = [
     "halcyon",
     "halcyon_dom",
     "halcyon_macro",
+    "halcyon_macro_impl",
     "halcyon_macro_test",
     "examples/simple_store",
 ]
