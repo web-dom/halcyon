@@ -3,6 +3,7 @@ name = "halcyon_macro_test"
 version = "0.0.1"
 authors = ["Richard <Richard>"]
 edition = "2018"
+publish = false
 
 [dependencies]
 halcyon = {path="../halcyon"}
