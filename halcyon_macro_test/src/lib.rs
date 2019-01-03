@@ -10,11 +10,8 @@ mod tests {
     fn it_works() {
         let _abc = 123;
         let a = html! {
-            <div a="hello.test" b={} c>
-                    <div/>
-                    <div h="sdf" a={||{test}}>
-                        {test}
-                    </div>
+            <div a="123" b="test" c={}>
+                <h1>{}</h1>
             </div>
         };
         println!("{}", a);

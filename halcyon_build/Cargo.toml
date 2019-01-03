@@ -1,9 +1,0 @@
-[package]
-name = "halcyon_build"
-version = "0.0.1"
-authors = ["Richard Anaya"]
-edition = "2018"
-description = "a build system for a proper html! macro"
-license = "MIT"
-
-[dependencies]
