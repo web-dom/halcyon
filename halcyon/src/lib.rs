@@ -59,6 +59,12 @@ pub enum VirtualNode {
     Text(VirtualNodeText),
 }
 
+impl From<&str> for VirtualNode {
+    fn from(v: &str) -> VirtualNode {
+        t(v)
+    }
+}
+
 impl VirtualNode {
     pub fn from_element(e: Rc<RefCell<Element>>) -> VirtualNode {
         VirtualNode::Element(VirtualNodeElement {

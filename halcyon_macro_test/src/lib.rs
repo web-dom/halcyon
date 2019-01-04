@@ -30,7 +30,16 @@ mod tests {
         let result = html! {
             <div><div/></div>
         };
-        assert_eq!(expected, result, "basic element did not match");
+        assert_eq!(expected, result, "simple child did not match");
+    }
+
+    #[test]
+    fn simple_code_child() {
+        let expected = halcyon::h("div", None, Some(vec![halcyon::t("hello world")]));
+        let result = html! {
+            <div>{"hello world"}</div>
+        };
+        assert_eq!(expected, result, "simple code child did not match");
     }
 
     #[test]
@@ -81,6 +90,23 @@ mod tests {
         );
         let result = html! {
             <div a={123i32}></div>
+        };
+        assert_eq!(expected, result, "basic code attribute did not match");
+    }
+
+    #[test]
+    fn basic_string_attribute() {
+        let expected = halcyon::h(
+            "div",
+            Some({
+                let mut h = halcyon::Props::new();
+                h.insert("a".to_string(), halcyon::Prop::from("hello"));
+                h
+            }),
+            None,
+        );
+        let result = html! {
+            <div a={"hello"}></div>
         };
         assert_eq!(expected, result, "basic code attribute did not match");
     }

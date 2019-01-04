@@ -41,6 +41,12 @@ impl From<String> for Prop {
     }
 }
 
+impl From<&str> for Prop {
+    fn from(v: &str) -> Prop {
+        Prop::String(v.to_string())
+    }
+}
+
 impl From<Props> for Prop {
     fn from(v: Props) -> Prop {
         Prop::Props(v)

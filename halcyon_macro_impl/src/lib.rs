@@ -20,7 +20,9 @@ impl Element {
                 .iter()
                 .map(|x| match x {
                     ElementChild::Element(e) => e.to_token_stream().to_string(),
-                    ElementChild::Code(c) => c.stream().to_string(),
+                    ElementChild::Code(c) => {
+                        format!(r#"halcyon::VirtualNode::from({})"#, c.stream().to_string())
+                    }
                 })
                 .collect::<Vec<String>>()
                 .join(",");
