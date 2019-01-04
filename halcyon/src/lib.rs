@@ -1,10 +1,9 @@
-use crate::dom::{Element, MemoryDOM, MemoryElement, DOM};
-use crate::extensions::attributes::Attributes;
+use crate::dom::{Element, DOM};
 use crate::extensions::Extension;
 use std::cell::RefCell;
 use std::rc::Rc;
-mod dom;
-mod extensions;
+pub mod dom;
+pub mod extensions;
 mod store;
 
 pub use crate::store::Reducer;
@@ -27,7 +26,7 @@ impl Halcyon {
     }
 
     pub fn has_patched(&self) -> bool {
-        let mut c = self.current_vnode.borrow();
+        let c = self.current_vnode.borrow();
         if let None = *c {
             return false;
         }
@@ -58,7 +57,7 @@ pub enum VirtualNode {
 }
 
 impl VirtualNode {
-    fn from_element(e: Rc<RefCell<Element>>) -> VirtualNode {
+    pub fn from_element(e: Rc<RefCell<Element>>) -> VirtualNode {
         VirtualNode::Element(VirtualNodeElement {
             selector: String::from("div"),
             data: None,
@@ -111,6 +110,8 @@ pub fn t(text: &str) -> VirtualNode {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::dom::{MemoryDOM, MemoryElement};
+    use crate::extensions::attributes::Attributes;
 
     fn render(element: Rc<RefCell<Element>>, container: VirtualNode) {
         thread_local! {

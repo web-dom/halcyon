@@ -11,6 +11,7 @@ pub trait DOM: Debug {
 }
 
 #[derive(Debug)]
+#[allow(dead_code)]
 pub struct MemoryDOM {}
 
 impl MemoryDOM {

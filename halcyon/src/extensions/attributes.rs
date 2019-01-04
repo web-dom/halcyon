@@ -25,4 +25,4 @@ impl Attributes {
     }
 }
 
-fn update_attributes(old_vnode: &VirtualNode, new_vnode: &VirtualNode) {}
+fn update_attributes(_old_vnode: &VirtualNode, _new_vnode: &VirtualNode) {}

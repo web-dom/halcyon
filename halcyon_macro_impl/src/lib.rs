@@ -2,12 +2,19 @@ extern crate proc_macro;
 
 use proc_macro::{Group, Ident, Literal, Punct, TokenStream, TokenTree};
 use proc_macro_hack::proc_macro_hack;
+use std::str::FromStr;
 
 #[derive(Debug)]
 struct Element {
     tag: String,
     children: Vec<ElementChild>,
     attributes: Vec<Attribute>,
+}
+
+impl Element {
+    fn to_token_stream(&self) -> TokenStream {
+        TokenStream::from_str(&format!("42")).expect("invalid token stream")
+    }
 }
 
 #[derive(Debug)]
@@ -75,7 +82,6 @@ fn parse_element(
     if let Some(TokenTree::Ident(tag)) = tokens_iter.next() {
         let mut attributes: Vec<Attribute> = vec![];
         loop {
-            println!("{:?}", tokens_iter.peek());
             if let Some(TokenTree::Punct(next_token)) = tokens_iter.peek() {
                 if next_token.to_string() == ">" {
                     break;
@@ -90,18 +96,15 @@ fn parse_element(
                 panic!("unexpected member of element")
             }
         }
-        println!("!! {:?}", tokens_iter.peek());
         if let Some(TokenTree::Punct(t)) = tokens_iter.next() {
             if t.to_string() == ">" {
                 let mut children: Vec<ElementChild> = vec![];
                 loop {
                     let next = tokens_iter.next();
                     if let Some(TokenTree::Punct(t)) = next {
-                        println!("checking if next tag is new child or end tag");
                         if t.to_string() == "<" {
                             if let Some(TokenTree::Punct(t)) = tokens_iter.peek() {
                                 if t.to_string() == "/" {
-                                    println!("end tag");
                                     // if we are at end tag
                                     // fast forward
                                     tokens_iter.next(); // /
@@ -110,11 +113,9 @@ fn parse_element(
                                     break;
                                 }
                             } else if let Some(TokenTree::Ident(t)) = tokens_iter.peek() {
-                                println!("new child");
                                 // if we might be at new child
                                 let result = parse_element(tokens_iter)?;
                                 tokens_iter = result.0;
-                                println!("{:?}", result.1);
                                 children.push(ElementChild::Element(result.1));
                             } else {
                                 panic!("unexpected child");
@@ -123,7 +124,6 @@ fn parse_element(
                     } else if let Some(TokenTree::Group(t)) = next {
                         children.push(ElementChild::Code(t));
                     } else {
-                        println!("{:?}", next);
                         panic!("unexpected next element")
                     }
                 }
@@ -150,10 +150,10 @@ pub fn html(input: TokenStream) -> TokenStream {
         if t.to_string() == "<" {
             let result = parse_element(tokens_iter).unwrap();
             tokens_iter = result.0;
-            println!("hey! {:?}", result.1);
+            return result.1.to_token_stream();
         } else {
             panic!("html! macro contents did not start with an element tag")
         }
     }
-    TokenTree::Literal(Literal::u32_suffixed(42)).into()
+    panic!("html! macro did not start with punct")
 }

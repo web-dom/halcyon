@@ -1,4 +1,3 @@
-use crate::Halcyon;
 use crate::VirtualNode;
 use std::fmt::Debug;
 
