@@ -1,6 +1,6 @@
 extern crate proc_macro;
 
-use proc_macro::{Group, Ident, Literal, Punct, TokenStream, TokenTree};
+use proc_macro::{Group, TokenStream, TokenTree};
 use proc_macro_hack::proc_macro_hack;
 use std::str::FromStr;
 
@@ -13,7 +13,7 @@ struct Element {
 
 impl Element {
     fn to_token_stream(&self) -> TokenStream {
-        TokenStream::from_str(&format!("42")).expect("invalid token stream")
+        TokenStream::from_str(&format!(r#"halcyon::h("div", None, None)"#)).expect("invalid token stream")
     }
 }
 
@@ -88,7 +88,7 @@ fn parse_element(
                 } else {
                     panic!("unexpected end of element")
                 }
-            } else if let Some(TokenTree::Ident(next_token)) = tokens_iter.peek() {
+            } else if let Some(TokenTree::Ident(_next_token)) = tokens_iter.peek() {
                 let result = parse_attribute(tokens_iter);
                 tokens_iter = result.0;
                 attributes.push(result.1);
@@ -112,7 +112,7 @@ fn parse_element(
                                     tokens_iter.next(); // >
                                     break;
                                 }
-                            } else if let Some(TokenTree::Ident(t)) = tokens_iter.peek() {
+                            } else if let Some(TokenTree::Ident(_t)) = tokens_iter.peek() {
                                 // if we might be at new child
                                 let result = parse_element(tokens_iter)?;
                                 tokens_iter = result.0;
@@ -149,7 +149,6 @@ pub fn html(input: TokenStream) -> TokenStream {
     if let Some(TokenTree::Punct(t)) = tokens_iter.next() {
         if t.to_string() == "<" {
             let result = parse_element(tokens_iter).unwrap();
-            tokens_iter = result.0;
             return result.1.to_token_stream();
         } else {
             panic!("html! macro contents did not start with an element tag")

@@ -7,13 +7,11 @@ extern crate halcyon_macro;
 #[cfg(test)]
 mod tests {
     #[test]
-    fn it_works() {
-        let _abc = 123;
-        let a = html! {
-            <div a="123" b="test" c={}>
-                <h1>{}</h1>
-            </div>
+    fn basic_element() {
+        let expected = halcyon::h("div", None, None);
+        let result = html! {
+            <div></div>
         };
-        println!("{}", a);
+        assert!(expected == result, "basic element did not match");
     }
 }

@@ -50,7 +50,7 @@ impl Halcyon {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug,PartialEq)]
 pub enum VirtualNode {
     Element(VirtualNodeElement),
     Text(VirtualNodeText),
@@ -80,10 +80,23 @@ pub struct VirtualNodeElement {
     list_key: Option<Key>,
 }
 
+impl PartialEq for VirtualNodeElement {
+    fn eq(&self, other: &VirtualNodeElement) -> bool {
+        self.selector == other.selector && self.data == other.data && self.list_key == other.list_key && self.children == other.children
+    }
+}
+
+
 #[derive(Debug)]
 pub struct VirtualNodeText {
     element: Option<Rc<RefCell<Element>>>,
     text: String,
+}
+
+impl PartialEq for VirtualNodeText {
+    fn eq(&self, other: &VirtualNodeText) -> bool {
+        self.text == other.text
+    }
 }
 
 pub fn h(
