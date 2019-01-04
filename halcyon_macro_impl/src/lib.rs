@@ -13,7 +13,53 @@ struct Element {
 
 impl Element {
     fn to_token_stream(&self) -> TokenStream {
-        TokenStream::from_str(&format!(r#"halcyon::h("div", None, None)"#)).expect("invalid token stream")
+        let mut children_token_stream = String::from("None");
+        if self.children.len() > 0 {
+            let children_list_str = self
+                .children
+                .iter()
+                .map(|x| match x {
+                    ElementChild::Element(e) => e.to_token_stream().to_string(),
+                    ElementChild::Code(c) => c.stream().to_string(),
+                })
+                .collect::<Vec<String>>()
+                .join(",");
+            children_token_stream = String::from(format!("Some(vec![{}])", children_list_str));
+        }
+
+        let mut attributes_token_stream = String::from("None");
+        if self.attributes.len() > 0 {
+            let attributes_list_str = self
+                .attributes
+                .iter()
+                .map(|a| match &a.value {
+                    AttributeValue::Text(t) => format!(
+                        r#"h.insert("{}".to_string(),halcyon::Prop::from({}.to_string()));"#,
+                        a.name, t
+                    ),
+                    AttributeValue::Code(c) => format!(
+                        r#"h.insert("{}".to_string(),halcyon::Prop::from({}));"#,
+                        a.name,
+                        c.stream().to_string()
+                    ),
+                })
+                .collect::<Vec<String>>()
+                .join("\n");
+            attributes_token_stream = String::from(format!(
+                r#"Some({{
+                let mut h = halcyon::Props::new();
+                {}
+                h
+            }})"#,
+                attributes_list_str
+            ));
+        }
+
+        TokenStream::from_str(&format!(
+            r#"halcyon::h("div", {}, {})"#,
+            attributes_token_stream, children_token_stream
+        ))
+        .expect("invalid token stream")
     }
 }
 
@@ -85,6 +131,24 @@ fn parse_element(
             if let Some(TokenTree::Punct(next_token)) = tokens_iter.peek() {
                 if next_token.to_string() == ">" {
                     break;
+                } else if next_token.to_string() == "/" {
+                    //skip the /
+                    tokens_iter.next();
+                    if let Some(TokenTree::Punct(next_token)) = tokens_iter.peek() {
+                        if next_token.to_string() == ">" {
+                            return Ok((
+                                tokens_iter,
+                                Element {
+                                    tag: tag.to_string(),
+                                    children: vec![],
+                                    attributes: attributes,
+                                },
+                            ));
+                        } else {
+                            println!("{:?}", next_token);
+                            panic!("unexpected short end of element")
+                        }
+                    }
                 } else {
                     panic!("unexpected end of element")
                 }

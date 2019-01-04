@@ -4,8 +4,11 @@ use std::cell::RefCell;
 use std::rc::Rc;
 pub mod dom;
 pub mod extensions;
+pub mod props;
 mod store;
 
+pub use crate::props::Prop;
+pub use crate::props::Props;
 pub use crate::store::Reducer;
 pub use crate::store::Store;
 
@@ -50,7 +53,7 @@ impl Halcyon {
     }
 }
 
-#[derive(Debug,PartialEq)]
+#[derive(Debug, PartialEq)]
 pub enum VirtualNode {
     Element(VirtualNodeElement),
     Text(VirtualNodeText),
@@ -68,7 +71,7 @@ impl VirtualNode {
     }
 }
 
-type VirtualNodeData = i32;
+type VirtualNodeData = props::Props;
 type Key = i32;
 
 #[derive(Debug)]
@@ -82,10 +85,12 @@ pub struct VirtualNodeElement {
 
 impl PartialEq for VirtualNodeElement {
     fn eq(&self, other: &VirtualNodeElement) -> bool {
-        self.selector == other.selector && self.data == other.data && self.list_key == other.list_key && self.children == other.children
+        self.selector == other.selector
+            && self.data == other.data
+            && self.list_key == other.list_key
+            && self.children == other.children
     }
 }
-
 
 #[derive(Debug)]
 pub struct VirtualNodeText {
