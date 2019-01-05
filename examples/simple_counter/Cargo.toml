@@ -8,7 +8,6 @@ edition = "2018"
 crate-type = ["cdylib"]
 
 [dependencies]
-virtual-dom-rs = { git="https://github.com/chinedufn/percy"}
 wasm-bindgen = "0.2.29"
 
 [dependencies.web-sys]
