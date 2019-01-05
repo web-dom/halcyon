@@ -52,11 +52,13 @@ fn counter() -> VirtualNode {
                 <div>
                     {state.count}
                     <div class="counter-button" onclick={move||{
-                        dispatcher_increment(Actions::Increment)}}>
+                        dispatcher_increment(Actions::Increment);
+                    }}>
                         {"+"}
                     </div>
                     <div class="counter-button" onclick={move||{
-                        dispatcher_decrement(Actions::Decrement)}}>
+                        dispatcher_decrement(Actions::Decrement);
+                    }}>
                         {"-"}
                     </div>
                 </div>
