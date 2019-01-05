@@ -30,6 +30,7 @@ impl Halcyon {
         render: Box<Fn() -> VirtualNode>,
     ) {
         let node_renderer = Rc::new(render);
+        let halcyon_extra_key = halcyon.clone();
         halcyon.with(|h| {
             let t = h.dom().query_selector(target);
             // Get the body as our target element
@@ -39,8 +40,8 @@ impl Halcyon {
         let render_ref = node_renderer.clone();
         store.with(|s| {
             // Add a listener to listen for state changes
-            s.borrow().add_listener(Box::new(|| {
-                halcyon.with(|h| {
+            s.borrow().add_listener(Box::new(move || {
+                halcyon_extra_key.with(|h| {
                     // Rerender everything again with new virtual dom
                     h.render(render_ref());
                 })
@@ -187,7 +188,6 @@ pub fn t(text: &str) -> VirtualNode {
 mod tests {
     use super::*;
     use crate::dom::{MemoryDOM, MemoryElement};
-    use crate::extensions::attributes::Attributes;
 
     fn render(element: Rc<RefCell<Element>>, container: VirtualNode) {
         thread_local! {

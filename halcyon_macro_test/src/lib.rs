@@ -1,3 +1,4 @@
+#![feature(proc_macro_hygiene)]
 #[allow(unused_imports)]
 extern crate halcyon;
 #[macro_use]
