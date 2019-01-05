@@ -6,3 +6,6 @@ dom.*
 dom_bg.*
 target
 node_modules
+example_*.ts
+example_*.js
+example_*.wasm

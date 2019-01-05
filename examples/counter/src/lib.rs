@@ -43,28 +43,25 @@ thread_local! { static STORE : RefCell<Store<Rc<Counter>, Actions>> = RefCell::n
 
 // Our counter component
 fn counter() -> VirtualNode {
-    Store::connect(
-        &STORE,
-        Box::new(|state, dispatch| {
-            let dispatcher_increment = dispatch.clone();
-            let dispatcher_decrement = dispatch.clone();
-            html! {
-                <div>
-                    {state.count}
-                    <div class="counter-button" onclick={move||{
-                        dispatcher_increment(Actions::Increment);
-                    }}>
-                        {"+"}
-                    </div>
-                    <div class="counter-button" onclick={move||{
-                        dispatcher_decrement(Actions::Decrement);
-                    }}>
-                        {"-"}
-                    </div>
+    Store::connect(&STORE, |state, dispatch| {
+        let dispatcher_increment = dispatch.clone();
+        let dispatcher_decrement = dispatch.clone();
+        html! {
+            <div>
+                {state.count}
+                <div class="counter-button" onclick={move||{
+                    dispatcher_increment(Actions::Increment);
+                }}>
+                    {"+"}
                 </div>
-            }
-        }),
-    )
+                <div class="counter-button" onclick={move||{
+                    dispatcher_decrement(Actions::Decrement);
+                }}>
+                    {"-"}
+                </div>
+            </div>
+        }
+    })
 }
 
 #[wasm_bindgen(start)]
@@ -75,6 +72,7 @@ pub fn run() -> Result<(), JsValue> {
     // Setup Halcyon:
     // 1. runs initial render to target query selector Element
     // 2. listening to the store for new state and rerenders
-    Halcyon::setup(&HALCYON, &STORE, "body", Box::new(|| counter()));
+    // This uses a closure that calls the component's rendering function
+    Halcyon::setup(&HALCYON, &STORE, "body", || counter());
     Ok(())
 }

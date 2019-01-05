@@ -23,11 +23,11 @@ pub struct Halcyon {
 }
 
 impl Halcyon {
-    pub fn setup<T: Clone + Reducer<P>, P>(
+    pub fn setup<T: Clone + Reducer<P>, P, Q: 'static + Fn() -> VirtualNode>(
         halcyon: &'static std::thread::LocalKey<Halcyon>,
         store: &'static std::thread::LocalKey<RefCell<Store<T, P>>>,
         target: &str,
-        render: Box<Fn() -> VirtualNode>,
+        render: Q,
     ) {
         let node_renderer = Rc::new(render);
         let halcyon_extra_key = halcyon.clone();

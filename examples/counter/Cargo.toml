@@ -1,5 +1,5 @@
 [package]
-name = "counter"
+name = "example_counter"
 version = "0.0.1"
 authors = ["Richard Anaya"]
 edition = "2018"

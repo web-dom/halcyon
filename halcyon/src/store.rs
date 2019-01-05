@@ -29,9 +29,9 @@ where
         }
     }
 
-    pub fn connect<V>(
+    pub fn connect<V, Q: Fn(T, Rc<Fn(P)>) -> V>(
         store_thread_key: &'static std::thread::LocalKey<RefCell<Store<T, P>>>,
-        handler: Box<Fn(T, Rc<Fn(P)>) -> V>,
+        handler: Q,
     ) -> V {
         store_thread_key.with(|store| {
             handler(
