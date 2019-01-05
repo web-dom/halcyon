@@ -55,7 +55,7 @@ where
         self.listeners.borrow_mut().push(listener)
     }
 
-    pub fn state(&self) -> std::cell::Ref<T>{
+    pub fn state(&self) -> std::cell::Ref<T> {
         self.state.borrow()
     }
 }

@@ -1,10 +1,10 @@
 #![feature(proc_macro_hygiene)]
-use wasm_bindgen::prelude::*;
-use halcyon::{Halcyon, VirtualNode,Store,Reducer};
+use halcyon::{Halcyon, Reducer, Store, VirtualNode};
 use halcyon_dom::WebIDLDOM;
 use halcyon_macro::html;
-use std::rc::Rc;
 use std::cell::RefCell;
+use std::rc::Rc;
+use wasm_bindgen::prelude::*;
 
 pub struct Counter {
     pub count: i32,
@@ -37,8 +37,8 @@ impl Reducer<Actions> for Rc<Counter> {
 
 thread_local! { static STORE : RefCell<Store<Rc<Counter>, Actions>> = RefCell::new(Store::new(Rc::new(Counter{count:0}))); }
 
-fn counter(c:i32) -> VirtualNode {
-    html!{
+fn counter(c: i32) -> VirtualNode {
+    html! {
         <div>{c}</div>
     }
 }

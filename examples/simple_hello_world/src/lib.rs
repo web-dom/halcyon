@@ -1,11 +1,11 @@
 #![feature(proc_macro_hygiene)]
-use wasm_bindgen::prelude::*;
 use halcyon::{Halcyon, VirtualNode};
 use halcyon_dom::WebIDLDOM;
 use halcyon_macro::html;
+use wasm_bindgen::prelude::*;
 
 fn hello_world() -> VirtualNode {
-    html!{
+    html! {
         <div>{"Hello World!"}</div>
     }
 }

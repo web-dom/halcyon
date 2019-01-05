@@ -28,7 +28,10 @@ impl DOM for WebIDLDOM {
         let window = web_sys::window().unwrap();
         let document = window.document().unwrap();
         Rc::new(RefCell::new(WebIDLElement {
-            el: document.query_selector(selector).expect("could not query selected element").expect("did not find selected element"),
+            el: document
+                .query_selector(selector)
+                .expect("could not query selected element")
+                .expect("did not find selected element"),
         }))
     }
 }
