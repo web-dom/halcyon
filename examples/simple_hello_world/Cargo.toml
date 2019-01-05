@@ -1,5 +1,5 @@
 [package]
-name = "simple_counter"
+name = "simple_hello_world"
 version = "0.0.1"
 authors = ["Richard Anaya"]
 edition = "2018"

@@ -1,9 +1,8 @@
 #![feature(proc_macro_hygiene)]
+use wasm_bindgen::prelude::*;
 use halcyon::{Halcyon, VirtualNode,Store,Reducer};
 use halcyon_dom::WebIDLDOM;
-use wasm_bindgen::prelude::*;
-#[macro_use]
-extern crate halcyon_macro;
+use halcyon_macro::html;
 use std::rc::Rc;
 use std::cell::RefCell;
 
@@ -36,11 +35,9 @@ impl Reducer<Actions> for Rc<Counter> {
     }
 }
 
-
 thread_local! { static STORE : RefCell<Store<Rc<Counter>, Actions>> = RefCell::new(Store::new(Rc::new(Counter{count:0}))); }
 
-fn counter() -> VirtualNode {
-    let c = 1;
+fn counter(c:i32) -> VirtualNode {
     html!{
         <div>{c}</div>
     }
@@ -53,7 +50,7 @@ pub fn run() -> Result<(), JsValue> {
     };
     HALCYON.with(|halcyon| {
         let body = halcyon.dom().query_selector("body");
-        halcyon.render(body, counter());
+        halcyon.render(body, counter(42));
     });
     Ok(())
 }

@@ -7,4 +7,5 @@ members = [
     "halcyon_macro_test",
     "examples/simple_store",
     "examples/simple_counter",
+    "examples/simple_hello_world",
 ]
