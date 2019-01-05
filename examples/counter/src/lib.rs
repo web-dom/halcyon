@@ -43,20 +43,26 @@ thread_local! { static STORE : RefCell<Store<Rc<Counter>, Actions>> = RefCell::n
 
 // Our counter component
 fn counter() -> VirtualNode {
-    let c = STORE.with(|x| x.borrow().state().count);
-    let increment = ||{
-        STORE.with(|x| x.borrow().dispatch(Actions::Increment));
-    };
-    let decrement = ||{
-        STORE.with(|x| x.borrow().dispatch(Actions::Decrement));
-    };
-    html! {
-        <div>
-            {c}
-            <div class="counter-button" onclick={increment}>{"+"}</div>
-            <div class="counter-button" onclick={decrement}>{"-"}</div>
-        </div>
-    }
+    Store::connect(
+        &STORE,
+        Box::new(|state, dispatch| {
+            let dispatcher_increment = dispatch.clone();
+            let dispatcher_decrement = dispatch.clone();
+            html! {
+                <div>
+                    {state.count}
+                    <div class="counter-button" onclick={move||{
+                        dispatcher_increment(Actions::Increment)}}>
+                        {"+"}
+                    </div>
+                    <div class="counter-button" onclick={move||{
+                        dispatcher_decrement(Actions::Decrement)}}>
+                        {"-"}
+                    </div>
+                </div>
+            }
+        }),
+    )
 }
 
 #[wasm_bindgen(start)]
@@ -64,20 +70,9 @@ pub fn run() -> Result<(), JsValue> {
     thread_local! {
         static HALCYON:Halcyon = Halcyon::new(WebIDLDOM::new());
     };
-    HALCYON.with(|halcyon| {
-        // Get the body as our target element
-        let body = halcyon.dom().query_selector("body");
-        // Do initial render to element
-        halcyon.init_render(body, counter());
-    });
-    STORE.with(|store| {
-        // Add a listener to listen for state changes
-        store.borrow().add_listener(Box::new(|| {
-            HALCYON.with(|h| {
-                // Rerender everything again with new virtual dom
-                h.render(counter());
-            })
-        }));
-    });
+    // Setup Halcyon:
+    // 1. runs initial render to target query selector Element
+    // 2. listening to the store for new state and rerenders
+    Halcyon::setup(&HALCYON, &STORE, "body", Box::new(|| counter()));
     Ok(())
 }

@@ -23,6 +23,31 @@ pub struct Halcyon {
 }
 
 impl Halcyon {
+    pub fn setup<T: Clone + Reducer<P>, P>(
+        halcyon: &'static std::thread::LocalKey<Halcyon>,
+        store: &'static std::thread::LocalKey<RefCell<Store<T, P>>>,
+        target: &str,
+        render: Box<Fn() -> VirtualNode>,
+    ) {
+        let node_renderer = Rc::new(render);
+        halcyon.with(|h| {
+            let t = h.dom().query_selector(target);
+            // Get the body as our target element
+            // Do initial render to element
+            h.init_render(t, node_renderer());
+        });
+        let render_ref = node_renderer.clone();
+        store.with(|s| {
+            // Add a listener to listen for state changes
+            s.borrow().add_listener(Box::new(|| {
+                halcyon.with(|h| {
+                    // Rerender everything again with new virtual dom
+                    h.render(render_ref());
+                })
+            }));
+        });
+    }
+
     pub fn new(api: Box<DOM>) -> Halcyon {
         Halcyon {
             api: api,
