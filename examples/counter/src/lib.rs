@@ -44,9 +44,17 @@ thread_local! { static STORE : RefCell<Store<Rc<Counter>, Actions>> = RefCell::n
 // Our counter component
 fn counter() -> VirtualNode {
     let c = STORE.with(|x| x.borrow().state().count);
+    let increment = ||{
+        STORE.with(|x| x.borrow().dispatch(Actions::Increment));
+    };
+    let decrement = ||{
+        STORE.with(|x| x.borrow().dispatch(Actions::Decrement));
+    };
     html! {
         <div>
             {c}
+            <div class="counter-button" onclick={increment}>{"+"}</div>
+            <div class="counter-button" onclick={decrement}>{"-"}</div>
         </div>
     }
 }
@@ -61,15 +69,15 @@ pub fn run() -> Result<(), JsValue> {
         let body = halcyon.dom().query_selector("body");
         // Do initial render to element
         halcyon.init_render(body, counter());
-        STORE.with(|store| {
-            // Add a listener to listen for state changes
-            store.borrow().add_listener(Box::new(|| {
-                HALCYON.with(|h| {
-                    // Rerender everything again with new virtual dom
-                    h.render(counter());
-                })
-            }));
-        });
+    });
+    STORE.with(|store| {
+        // Add a listener to listen for state changes
+        store.borrow().add_listener(Box::new(|| {
+            HALCYON.with(|h| {
+                // Rerender everything again with new virtual dom
+                h.render(counter());
+            })
+        }));
     });
     Ok(())
 }

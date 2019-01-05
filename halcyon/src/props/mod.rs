@@ -59,11 +59,11 @@ impl From<bool> for Prop {
     }
 }
 
-impl<T> From<Box<T>> for Prop
+impl<T> From<T> for Prop
 where
     T: Fn() + 'static,
 {
-    fn from(v: Box<T>) -> Prop {
-        Prop::Fn00(v)
+    fn from(v: T) -> Prop {
+        Prop::Fn00(Box::new(v))
     }
 }
