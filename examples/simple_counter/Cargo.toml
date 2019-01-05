@@ -9,6 +9,9 @@ crate-type = ["cdylib"]
 
 [dependencies]
 wasm-bindgen = "0.2.29"
+halcyon = {path="../../halcyon"}
+halcyon_macro = {path="../../halcyon_macro"}
+halcyon_dom = {path="../../halcyon_dom"}
 
 [dependencies.web-sys]
 version = "0.3.4"

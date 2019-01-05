@@ -7,3 +7,19 @@ description = "An implementation of halcyon's DOM api for wasm-bindgen"
 license = "MIT"
 
 [dependencies]
+halcyon = {path="../halcyon"}
+
+[dependencies.web-sys]
+version = "0.3.4"
+features = [
+    "console",
+    "Document",
+    "Element",
+    'HtmlElement',
+    "EventTarget",
+    "Node",
+    "NodeList",
+    "Text",
+    "Window",
+    "HtmlCollection",
+]

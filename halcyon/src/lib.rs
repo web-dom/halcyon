@@ -1,4 +1,4 @@
-use crate::dom::{Element, DOM};
+pub use crate::dom::{Element, DOM};
 use crate::extensions::Extension;
 use std::cell::RefCell;
 use std::rc::Rc;
@@ -7,6 +7,9 @@ pub mod extensions;
 pub mod props;
 mod store;
 
+pub use crate::dom::MemoryDOM;
+pub use crate::dom::MemoryElement;
+pub use crate::extensions::attributes::Attributes;
 pub use crate::props::Prop;
 pub use crate::props::Props;
 pub use crate::store::Reducer;
@@ -26,6 +29,10 @@ impl Halcyon {
             current_vnode: RefCell::new(None),
             extensions: extensions,
         }
+    }
+
+    pub fn dom(&self) -> &'_ Box<DOM> {
+        return &self.api;
     }
 
     pub fn has_patched(&self) -> bool {
@@ -51,6 +58,13 @@ impl Halcyon {
             e.post();
         }
     }
+
+    pub fn render(&self, element: Rc<RefCell<Element>>, container: VirtualNode) {
+        if !self.has_patched() {
+            self.patch(VirtualNode::from_element(element));
+        }
+        self.patch(container);
+    }
 }
 
 #[derive(Debug, PartialEq)]
@@ -59,9 +73,12 @@ pub enum VirtualNode {
     Text(VirtualNodeText),
 }
 
-impl From<&str> for VirtualNode {
-    fn from(v: &str) -> VirtualNode {
-        t(v)
+impl<T> From<T> for VirtualNode
+where
+    T: std::fmt::Display,
+{
+    fn from(v: T) -> VirtualNode {
+        t(&format!("{}", v))
     }
 }
 
