@@ -164,7 +164,7 @@ mod tests {
 
     fn render(element: Rc<RefCell<Element>>, container: VirtualNode) {
         thread_local! {
-            static HALCYON:Halcyon = Halcyon::new(MemoryDOM::new(),vec![Box::new(Attributes::new())]);
+            static HALCYON:Halcyon = Halcyon::new(MemoryDOM::new());
         };
         HALCYON.with(|halcyon| {
             if !halcyon.has_patched() {
