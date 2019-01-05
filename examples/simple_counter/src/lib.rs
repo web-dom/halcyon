@@ -1,4 +1,4 @@
-use halcyon::{Attributes, Halcyon, VirtualNode};
+use halcyon::{Halcyon, VirtualNode};
 use halcyon_dom::WebIDLDOM;
 use wasm_bindgen::prelude::*;
 #[macro_use]
@@ -15,7 +15,7 @@ fn counter() -> VirtualNode {
 #[wasm_bindgen(start)]
 pub fn run() -> Result<(), JsValue> {
     thread_local! {
-        static HALCYON:Halcyon = Halcyon::new(WebIDLDOM::new(),vec![Box::new(Attributes::new())]);
+        static HALCYON:Halcyon = Halcyon::new(WebIDLDOM::new());
     };
     HALCYON.with(|halcyon| {
         let body = halcyon.dom().query_selector("body");

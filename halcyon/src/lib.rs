@@ -23,7 +23,15 @@ pub struct Halcyon {
 }
 
 impl Halcyon {
-    pub fn new(api: Box<DOM>, extensions: Vec<Box<Extension>>) -> Halcyon {
+    pub fn new(api: Box<DOM>) -> Halcyon {
+        Halcyon {
+            api: api,
+            current_vnode: RefCell::new(None),
+            extensions: vec![Box::new(Attributes::new())],
+        }
+    }
+
+    pub fn custom(api: Box<DOM>, extensions: Vec<Box<Extension>>) -> Halcyon {
         Halcyon {
             api: api,
             current_vnode: RefCell::new(None),
