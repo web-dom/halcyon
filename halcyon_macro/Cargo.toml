@@ -9,4 +9,5 @@ edition = "2018"
 
 [dependencies]
 proc-macro-hack = "0.5"
+proc-macro-nested = "0.1.2"
 halcyon_macro_impl = {path="../halcyon_macro_impl"}

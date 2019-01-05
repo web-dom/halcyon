@@ -54,4 +54,8 @@ where
     pub fn add_listener(&self, listener: Box<Fn()>) {
         self.listeners.borrow_mut().push(listener)
     }
+
+    pub fn state(&self) -> std::cell::Ref<T>{
+        self.state.borrow()
+    }
 }
