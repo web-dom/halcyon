@@ -4,11 +4,11 @@ use wasm_bindgen::prelude::*;
 #[macro_use]
 extern crate halcyon_macro;
 
-static count: i32 = 42;
+static COUNT: i32 = 42;
 
 fn counter() -> VirtualNode {
     html! {
-        <div>{count}</div>
+        <div>{COUNT}</div>
     }
 }
 

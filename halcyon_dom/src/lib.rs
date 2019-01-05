@@ -1,6 +1,5 @@
 use halcyon::{Element, DOM};
 use std::cell::RefCell;
-use std::fmt::Debug;
 use std::rc::Rc;
 
 #[derive(Debug)]
@@ -15,35 +14,21 @@ impl WebIDLDOM {
 
 #[derive(Debug)]
 pub struct WebIDLElement {
-    tag: String,
-}
-
-impl WebIDLElement {
-    pub fn new(tag: &str) -> Rc<RefCell<Element>> {
-        Rc::new(RefCell::new(WebIDLElement {
-            tag: String::from(tag),
-        }))
-    }
+    el: web_sys::Element,
 }
 
 impl Element for WebIDLElement {
     fn get_tag(&self) -> String {
-        self.tag.clone()
-    }
-}
-
-impl WebIDLDOM {
-    pub fn query_selector(selector: &str) -> Rc<RefCell<Element>> {
-        Rc::new(RefCell::new(WebIDLElement {
-            tag: String::from(selector),
-        }))
+        self.el.tag_name()
     }
 }
 
 impl DOM for WebIDLDOM {
     fn query_selector(&self, selector: &str) -> Rc<RefCell<Element>> {
+        let window = web_sys::window().unwrap();
+        let document = window.document().unwrap();
         Rc::new(RefCell::new(WebIDLElement {
-            tag: String::from(selector),
+            el: document.query_selector(selector).expect("could not query selected element").expect("did not find selected element"),
         }))
     }
 }
