@@ -25,7 +25,7 @@ pub fn run() -> Result<(), JsValue> {
     // Gets a handle to the body
     let body = halcyon.dom().query_selector("body");
 
-    // Renders out the component's virtual dom to the body
-    halcyon.render(body, hello_world());
+    // Renders out the initial component's virtual dom to the body
+    halcyon.init_render(body, hello_world());
     Ok(())
 }

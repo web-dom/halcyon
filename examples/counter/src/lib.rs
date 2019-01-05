@@ -6,16 +6,19 @@ use std::cell::RefCell;
 use std::rc::Rc;
 use wasm_bindgen::prelude::*;
 
+// Our counter store
 pub struct Counter {
     pub count: i32,
 }
 
+// Create a counter store with default values
 impl Counter {
     pub fn new() -> Counter {
         Counter { count: 0 }
     }
 }
 
+// Our actions the store can handle
 enum Actions {
     Increment,
     Decrement,
@@ -23,7 +26,7 @@ enum Actions {
 
 impl Reducer<Actions> for Rc<Counter> {
     fn reduce(&self, a: Actions) -> Option<Rc<Counter>> {
-        // Reducers only return an Option if state changed
+        // Reducers take actions and return an Option::Some if there's a new state
         match a {
             Actions::Increment => Some(Rc::new(Counter {
                 count: self.count + 1,
@@ -35,11 +38,16 @@ impl Reducer<Actions> for Rc<Counter> {
     }
 }
 
+// Our static store
 thread_local! { static STORE : RefCell<Store<Rc<Counter>, Actions>> = RefCell::new(Store::new(Rc::new(Counter{count:0}))); }
 
-fn counter(c: i32) -> VirtualNode {
+// Our counter component
+fn counter() -> VirtualNode {
+    let c = STORE.with(|x| x.borrow().state().count);
     html! {
-        <div>{c}</div>
+        <div>
+            {c}
+        </div>
     }
 }
 
@@ -49,8 +57,19 @@ pub fn run() -> Result<(), JsValue> {
         static HALCYON:Halcyon = Halcyon::new(WebIDLDOM::new());
     };
     HALCYON.with(|halcyon| {
+        // Get the body as our target element
         let body = halcyon.dom().query_selector("body");
-        halcyon.render(body, counter(42));
+        // Do initial render to element
+        halcyon.init_render(body, counter());
+        STORE.with(|store| {
+            // Add a listener to listen for state changes
+            store.borrow().add_listener(Box::new(|| {
+                HALCYON.with(|h| {
+                    // Rerender everything again with new virtual dom
+                    h.render(counter());
+                })
+            }));
+        });
     });
     Ok(())
 }

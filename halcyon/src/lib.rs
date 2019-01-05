@@ -67,10 +67,12 @@ impl Halcyon {
         }
     }
 
-    pub fn render(&self, element: Rc<RefCell<Element>>, container: VirtualNode) {
-        if !self.has_patched() {
-            self.patch(VirtualNode::from_element(element));
-        }
+    pub fn init_render(&self, element: Rc<RefCell<Element>>, container: VirtualNode) {
+        self.patch(VirtualNode::from_element(element));
+        self.patch(container);
+    }
+
+    pub fn render(&self, container: VirtualNode) {
         self.patch(container);
     }
 }

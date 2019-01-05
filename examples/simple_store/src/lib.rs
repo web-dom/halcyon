@@ -25,7 +25,7 @@ enum Actions {
 impl Reducer<Actions> for Rc<Counter> {
     // A Reducer processes an action and returns a new state
     fn reduce(&self, a: Actions) -> Option<Rc<Counter>> {
-        // Reducers only return an Option if state changed
+        // Reducers take actions and return an Option::Some if there's a new state
         match a {
             Actions::Increment => Some(Rc::new(Counter {
                 count: self.count + 1,
