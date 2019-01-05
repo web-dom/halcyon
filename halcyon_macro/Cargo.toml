@@ -3,11 +3,8 @@ name = "halcyon_macro"
 version = "0.0.1"
 authors = ["Richard Anaya"]
 edition = "2018"
-
+description = "The implementation of halcyon procedural macro"
+license = "MIT"
 
 [lib]
-
-[dependencies]
-proc-macro-hack = "0.5"
-proc-macro-nested = "0.1.2"
-halcyon_macro_impl = {path="../halcyon_macro_impl"}
+proc-macro = true

@@ -1,3 +1,4 @@
+#![feature(proc_macro_hygiene)]
 use halcyon::{Halcyon, VirtualNode,Store,Reducer};
 use halcyon_dom::WebIDLDOM;
 use wasm_bindgen::prelude::*;
@@ -38,13 +39,10 @@ impl Reducer<Actions> for Rc<Counter> {
 
 thread_local! { static STORE : RefCell<Store<Rc<Counter>, Actions>> = RefCell::new(Store::new(Rc::new(Counter{count:0}))); }
 
-fn get_count() -> i32{
-    STORE.with(|s| s.borrow().state().count)
-}
-
 fn counter() -> VirtualNode {
+    let c = 1;
     html!{
-        <div>{ get_count() }</div>
+        <div>{c}</div>
     }
 }
 
