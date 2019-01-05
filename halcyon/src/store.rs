@@ -12,7 +12,7 @@ pub struct Store<T, P>
 where
     T: Clone,
 {
-    pub state: Rc<RefCell<T>>,
+    state: Rc<RefCell<T>>,
     listeners: Rc<RefCell<Vec<Box<Fn()>>>>,
     _p: PhantomData<P>,
 }

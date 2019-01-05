@@ -1,11 +1,10 @@
 [workspace]
-
 members = [
     "halcyon",
     "halcyon_dom",
     "halcyon_macro",
     "halcyon_macro_test",
     "examples/simple_store",
-    "examples/simple_counter",
+    "examples/counter",
     "examples/simple_hello_world",
 ]
