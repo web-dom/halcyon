@@ -20,7 +20,7 @@ fn hello_world() -> VirtualNode {
 pub fn run() -> Result<(), JsValue> {
     // Creates a halcyon instance with default extensions
     // Targeted to use WebIDL to talk with browser page
-    let halcyon = Halcyon::new(WebIDLDOM::new());
+    let mut halcyon = Halcyon::new(WebIDLDOM::new());
 
     // Gets a handle to the body
     let body = halcyon.dom().query_selector("body");

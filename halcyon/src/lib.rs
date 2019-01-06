@@ -19,13 +19,13 @@ pub use crate::vnode::{VirtualNode, VirtualNodeElement, VirtualNodeText};
 #[derive(Debug)]
 pub struct Halcyon {
     api: Box<DOM>,
-    current_vnode: RefCell<Option<VirtualNode>>,
+    current_vnode: VirtualNode,
     extensions: Vec<Box<Extension>>,
 }
 
 impl Halcyon {
     pub fn setup<T: Clone + Reducer<P>, P, Q: 'static + Fn() -> VirtualNode>(
-        halcyon: &'static std::thread::LocalKey<Halcyon>,
+        halcyon: &'static std::thread::LocalKey<RefCell<Halcyon>>,
         store: &'static std::thread::LocalKey<RefCell<Store<T, P>>>,
         target: &str,
         render: Q,
@@ -33,27 +33,33 @@ impl Halcyon {
         let node_renderer = Rc::new(render);
         let halcyon_extra_key = halcyon.clone();
         halcyon.with(|h| {
-            let t = h.dom().query_selector(target);
+            let mut h_mut = h.borrow_mut();
+            let t = h_mut.dom().query_selector(target);
             // Get the body as our target element
             // Do initial render to element
-            h.init_render(t, node_renderer());
+            h_mut.init_render(t, node_renderer());
         });
         let render_ref = node_renderer.clone();
         store.with(|s| {
             // Add a listener to listen for state changes
             s.borrow().add_listener(Box::new(move || {
                 halcyon_extra_key.with(|h| {
+                    let mut h_mut = h.borrow_mut();
                     // Rerender everything again with new virtual dom
-                    h.render(render_ref());
+                    h_mut.render(render_ref());
                 })
             }));
         });
     }
 
+    pub fn root(&self) -> &VirtualNode {
+        return &self.current_vnode
+    }
+
     pub fn new(api: Box<DOM>) -> Halcyon {
         Halcyon {
             api: api,
-            current_vnode: RefCell::new(None),
+            current_vnode: VirtualNode::Empty,
             extensions: vec![Box::new(Attributes::new())],
         }
     }
@@ -61,7 +67,7 @@ impl Halcyon {
     pub fn custom(api: Box<DOM>, extensions: Vec<Box<Extension>>) -> Halcyon {
         Halcyon {
             api: api,
-            current_vnode: RefCell::new(None),
+            current_vnode: VirtualNode::Empty,
             extensions: extensions,
         }
     }
@@ -70,36 +76,27 @@ impl Halcyon {
         return &self.api;
     }
 
-    pub fn has_patched(&self) -> bool {
-        let c = self.current_vnode.borrow();
-        if let None = *c {
-            return false;
-        }
-        return true;
-    }
-
-    pub fn patch(&self, new_vnode: VirtualNode) {
-        let mut c = self.current_vnode.borrow_mut();
-        if let None = *c {
-            *c = Some(new_vnode);
+    pub fn patch(&mut self, new_vnode: VirtualNode) {
+        if let VirtualNode::Empty = self.current_vnode {
+            self.current_vnode = new_vnode;
             return;
         }
 
         for e in self.extensions.iter() {
             e.pre();
         }
-        *c = Some(new_vnode);
+        self.current_vnode = new_vnode;
         for e in self.extensions.iter() {
             e.post();
         }
     }
 
-    pub fn init_render(&self, element: Rc<RefCell<Element>>, container: VirtualNode) {
+    pub fn init_render(&mut self, element: Rc<RefCell<Element>>, container: VirtualNode) {
         self.patch(VirtualNode::from_element(element));
         self.patch(container);
     }
 
-    pub fn render(&self, container: VirtualNode) {
+    pub fn render(&mut self, container: VirtualNode) {
         self.patch(container);
     }
 }

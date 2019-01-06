@@ -67,7 +67,7 @@ fn counter() -> VirtualNode {
 #[wasm_bindgen(start)]
 pub fn run() -> Result<(), JsValue> {
     thread_local! {
-        static HALCYON:Halcyon = Halcyon::new(WebIDLDOM::new());
+        static HALCYON:RefCell<Halcyon> = RefCell::new(Halcyon::new(WebIDLDOM::new()));
     };
     // Setup Halcyon:
     // 1. runs initial render to target query selector Element

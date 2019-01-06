@@ -12,6 +12,15 @@ impl MemoryDOM {
     }
 }
 
+impl DOM for MemoryDOM {
+    fn query_selector(&self, selector: &str) -> Rc<RefCell<Element>> {
+        Rc::new(RefCell::new(MemoryElement {
+            tag: String::from(selector),
+        }))
+    }
+}
+
+
 #[derive(Debug)]
 pub struct MemoryElement {
     tag: String,
@@ -28,13 +37,5 @@ impl MemoryElement {
 impl Element for MemoryElement {
     fn get_tag(&self) -> String {
         self.tag.clone()
-    }
-}
-
-impl DOM for MemoryDOM {
-    fn query_selector(&self, selector: &str) -> Rc<RefCell<Element>> {
-        Rc::new(RefCell::new(MemoryElement {
-            tag: String::from(selector),
-        }))
     }
 }

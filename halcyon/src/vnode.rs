@@ -4,6 +4,7 @@ use std::rc::Rc;
 
 #[derive(Debug, PartialEq)]
 pub enum VirtualNode {
+    Empty,
     Element(VirtualNodeElement),
     Text(VirtualNodeText),
 }
