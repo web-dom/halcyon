@@ -1,6 +1,4 @@
 use crate::dom::{Element, DOM};
-use std::cell::RefCell;
-use std::rc::Rc;
 
 #[derive(Debug)]
 #[allow(dead_code)]

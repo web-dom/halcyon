@@ -1,7 +1,4 @@
-#[allow(unused_imports)]
-use halcyon::{Reducer, Store};
-#[allow(unused_imports)]
-use std::cell::RefCell;
+use halcyon::{Reducer};
 use std::rc::Rc;
 
 // This is our store that will hold a simple value
@@ -40,6 +37,7 @@ impl Reducer<Actions> for Rc<Counter> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use halcyon::{Store};
 
     #[test]
     fn it_works() {
