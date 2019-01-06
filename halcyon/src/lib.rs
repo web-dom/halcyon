@@ -9,7 +9,7 @@ mod helpers;
 mod store;
 mod vnode;
 
-pub use crate::dom::{MemoryDOM,MemoryElement};
+pub use crate::dom::memory::{MemoryDOM,MemoryElement};
 pub use crate::extensions::attributes::Attributes;
 pub use crate::props::{Prop,Props};
 pub use crate::store::{Reducer,Store};
