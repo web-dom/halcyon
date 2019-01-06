@@ -2,7 +2,6 @@ use crate::{t, Element, Props};
 
 #[derive(Debug, PartialEq)]
 pub enum VirtualNode {
-    Empty,
     Element(VirtualNodeElement),
     Text(VirtualNodeText),
 }

@@ -9,15 +9,12 @@ mod tests {
         let mut halcyon = Halcyon::new(MemoryDOM::new());
         let body = MemoryElement::new("body");
         halcyon.init_render(body, html!(<div></div>));
-        let root = halcyon.root();
+        let root = halcyon.root().expect("there should be a root element");
         match &root {
             VirtualNode::Element(r) => {
-                match &r.element {
-                    Some(r) => assert_eq!("div",r.get_tag(),"tag should be div"),
-                    _ => panic!("should not be none"),
-                }
+                assert_eq!("div",r.selector,"selector should be div: {:?}", r);
             }
             _ => panic!("should not be none")
-        }
+        };
     }
 }

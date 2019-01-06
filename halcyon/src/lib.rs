@@ -19,7 +19,7 @@ pub use crate::vnode::{VirtualNode, VirtualNodeElement, VirtualNodeText};
 #[derive(Debug)]
 pub struct Halcyon {
     api: Box<DOM>,
-    current_vnode: VirtualNode,
+    current_vnode: Option<VirtualNode>,
     extensions: Vec<Box<Extension>>,
 }
 
@@ -52,14 +52,17 @@ impl Halcyon {
         });
     }
 
-    pub fn root(&self) -> &VirtualNode {
-        return &self.current_vnode
+    pub fn root(&self) -> Option<&VirtualNode> {
+        match self.current_vnode.as_ref() {
+            Some(s) => Some(s),
+            None => None
+        }
     }
 
     pub fn new(api: Box<DOM>) -> Halcyon {
         Halcyon {
             api: api,
-            current_vnode: VirtualNode::Empty,
+            current_vnode: None,
             extensions: vec![Box::new(Attributes::new())],
         }
     }
@@ -67,7 +70,7 @@ impl Halcyon {
     pub fn custom(api: Box<DOM>, extensions: Vec<Box<Extension>>) -> Halcyon {
         Halcyon {
             api: api,
-            current_vnode: VirtualNode::Empty,
+            current_vnode: None,
             extensions: extensions,
         }
     }
@@ -77,15 +80,15 @@ impl Halcyon {
     }
 
     pub fn patch(&mut self, new_vnode: VirtualNode) {
-        if let VirtualNode::Empty = self.current_vnode {
-            self.current_vnode = new_vnode;
+        if let None = self.current_vnode {
+            self.current_vnode = Some(new_vnode);
             return;
         }
 
         for e in self.extensions.iter() {
             e.pre();
         }
-        self.current_vnode = new_vnode;
+        self.current_vnode = Some(new_vnode);
         for e in self.extensions.iter() {
             e.post();
         }
