@@ -1,6 +1,4 @@
 use halcyon::{Element, DOM};
-use std::cell::RefCell;
-use std::rc::Rc;
 
 #[derive(Debug)]
 #[allow(dead_code)]
@@ -24,14 +22,14 @@ impl Element for WebIDLElement {
 }
 
 impl DOM for WebIDLDOM {
-    fn query_selector(&self, selector: &str) -> Rc<RefCell<Element>> {
+    fn query_selector(&self, selector: &str) -> Box<Element> {
         let window = web_sys::window().unwrap();
         let document = window.document().unwrap();
-        Rc::new(RefCell::new(WebIDLElement {
+        Box::new(WebIDLElement {
             el: document
                 .query_selector(selector)
                 .expect("could not query selected element")
                 .expect("did not find selected element"),
-        }))
+        })
     }
 }

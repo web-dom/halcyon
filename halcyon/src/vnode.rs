@@ -1,6 +1,4 @@
 use crate::{t, Element, Props};
-use std::cell::RefCell;
-use std::rc::Rc;
 
 #[derive(Debug, PartialEq)]
 pub enum VirtualNode {
@@ -19,7 +17,7 @@ where
 }
 
 impl VirtualNode {
-    pub fn from_element(e: Rc<RefCell<Element>>) -> VirtualNode {
+    pub fn from_element(e: Box<Element>) -> VirtualNode {
         VirtualNode::Element(VirtualNodeElement {
             selector: String::from("div"),
             data: None,
@@ -35,7 +33,7 @@ pub struct VirtualNodeElement {
     pub selector: String,
     pub data: Option<Props>,
     pub children: Option<Vec<VirtualNode>>,
-    pub element: Option<Rc<RefCell<Element>>>,
+    pub element: Option<Box<Element>>,
     pub list_key: Option<String>,
 }
 
@@ -50,7 +48,7 @@ impl PartialEq for VirtualNodeElement {
 
 #[derive(Debug)]
 pub struct VirtualNodeText {
-    pub element: Option<Rc<RefCell<Element>>>,
+    pub element: Option<Box<Element>>,
     pub text: String,
 }
 

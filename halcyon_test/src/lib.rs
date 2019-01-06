@@ -12,10 +12,10 @@ mod tests {
         let root = halcyon.root();
         match &root {
             VirtualNode::Element(r) => {
-                /*match r.element {
-                    Some(r) => (),
+                match &r.element {
+                    Some(r) => assert_eq!("div",r.get_tag(),"tag should be div"),
                     _ => panic!("should not be none"),
-                }*/
+                }
             }
             _ => panic!("should not be none")
         }

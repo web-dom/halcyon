@@ -91,7 +91,7 @@ impl Halcyon {
         }
     }
 
-    pub fn init_render(&mut self, element: Rc<RefCell<Element>>, container: VirtualNode) {
+    pub fn init_render(&mut self, element: Box<Element>, container: VirtualNode) {
         self.patch(VirtualNode::from_element(element));
         self.patch(container);
     }

@@ -13,13 +13,12 @@ impl MemoryDOM {
 }
 
 impl DOM for MemoryDOM {
-    fn query_selector(&self, selector: &str) -> Rc<RefCell<Element>> {
-        Rc::new(RefCell::new(MemoryElement {
+    fn query_selector(&self, selector: &str) -> Box<Element> {
+        Box::new(MemoryElement {
             tag: String::from(selector),
-        }))
+        })
     }
 }
-
 
 #[derive(Debug)]
 pub struct MemoryElement {
@@ -27,10 +26,10 @@ pub struct MemoryElement {
 }
 
 impl MemoryElement {
-    pub fn new(tag: &str) -> Rc<RefCell<Element>> {
-        Rc::new(RefCell::new(MemoryElement {
+    pub fn new(tag: &str) -> Box<Element> {
+        Box::new(MemoryElement {
             tag: String::from(tag),
-        }))
+        })
     }
 }
 
