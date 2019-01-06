@@ -1,6 +1,7 @@
 [workspace]
 members = [
     "halcyon",
+    "halcyon_test",
     "halcyon_dom",
     "halcyon_macro",
     "halcyon_macro_test",
