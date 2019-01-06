@@ -4,17 +4,17 @@ use std::cell::RefCell;
 use std::rc::Rc;
 pub mod dom;
 pub mod extensions;
-pub mod props;
 mod helpers;
+pub mod props;
 mod store;
 mod vnode;
 
-pub use crate::dom::memory::{MemoryDOM,MemoryElement};
+pub use crate::dom::memory::{MemoryDOM, MemoryElement};
 pub use crate::extensions::attributes::Attributes;
-pub use crate::props::{Prop,Props};
-pub use crate::store::{Reducer,Store};
-pub use crate::helpers::{h,t};
-pub use crate::vnode::{VirtualNode,VirtualNodeText,VirtualNodeElement};
+pub use crate::helpers::{h, t};
+pub use crate::props::{Prop, Props};
+pub use crate::store::{Reducer, Store};
+pub use crate::vnode::{VirtualNode, VirtualNodeElement, VirtualNodeText};
 
 #[derive(Debug)]
 pub struct Halcyon {

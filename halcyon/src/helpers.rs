@@ -1,10 +1,6 @@
-use crate::{Props,VirtualNode,VirtualNodeText,VirtualNodeElement};
+use crate::{Props, VirtualNode, VirtualNodeElement, VirtualNodeText};
 
-pub fn h(
-    selector: &str,
-    data: Option<Props>,
-    children: Option<Vec<VirtualNode>>,
-) -> VirtualNode {
+pub fn h(selector: &str, data: Option<Props>, children: Option<Vec<VirtualNode>>) -> VirtualNode {
     VirtualNode::Element(VirtualNodeElement {
         selector: String::from(selector),
         data: data,

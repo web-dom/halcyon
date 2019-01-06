@@ -1,6 +1,6 @@
-use std::rc::Rc;
+use crate::{t, Element, Props};
 use std::cell::RefCell;
-use crate::{Element,t,Props};
+use std::rc::Rc;
 
 #[derive(Debug, PartialEq)]
 pub enum VirtualNode {
