@@ -5,15 +5,16 @@ use std::rc::Rc;
 pub mod dom;
 pub mod extensions;
 pub mod props;
+mod helpers;
 mod store;
+mod vnode;
 
-pub use crate::dom::MemoryDOM;
-pub use crate::dom::MemoryElement;
+pub use crate::dom::{MemoryDOM,MemoryElement};
 pub use crate::extensions::attributes::Attributes;
-pub use crate::props::Prop;
-pub use crate::props::Props;
-pub use crate::store::Reducer;
-pub use crate::store::Store;
+pub use crate::props::{Prop,Props};
+pub use crate::store::{Reducer,Store};
+pub use crate::helpers::{h,t};
+pub use crate::vnode::{VirtualNode,VirtualNodeText,VirtualNodeElement};
 
 #[derive(Debug)]
 pub struct Halcyon {
@@ -101,87 +102,6 @@ impl Halcyon {
     pub fn render(&self, container: VirtualNode) {
         self.patch(container);
     }
-}
-
-#[derive(Debug, PartialEq)]
-pub enum VirtualNode {
-    Element(VirtualNodeElement),
-    Text(VirtualNodeText),
-}
-
-impl<T> From<T> for VirtualNode
-where
-    T: std::fmt::Display,
-{
-    fn from(v: T) -> VirtualNode {
-        t(&format!("{}", v))
-    }
-}
-
-impl VirtualNode {
-    pub fn from_element(e: Rc<RefCell<Element>>) -> VirtualNode {
-        VirtualNode::Element(VirtualNodeElement {
-            selector: String::from("div"),
-            data: None,
-            children: None,
-            element: Some(e),
-            list_key: None,
-        })
-    }
-}
-
-type VirtualNodeData = props::Props;
-type Key = i32;
-
-#[derive(Debug)]
-pub struct VirtualNodeElement {
-    selector: String,
-    data: Option<VirtualNodeData>,
-    children: Option<Vec<VirtualNode>>,
-    element: Option<Rc<RefCell<Element>>>,
-    list_key: Option<Key>,
-}
-
-impl PartialEq for VirtualNodeElement {
-    fn eq(&self, other: &VirtualNodeElement) -> bool {
-        self.selector == other.selector
-            && self.data == other.data
-            && self.list_key == other.list_key
-            && self.children == other.children
-    }
-}
-
-#[derive(Debug)]
-pub struct VirtualNodeText {
-    element: Option<Rc<RefCell<Element>>>,
-    text: String,
-}
-
-impl PartialEq for VirtualNodeText {
-    fn eq(&self, other: &VirtualNodeText) -> bool {
-        self.text == other.text
-    }
-}
-
-pub fn h(
-    selector: &str,
-    data: Option<VirtualNodeData>,
-    children: Option<Vec<VirtualNode>>,
-) -> VirtualNode {
-    VirtualNode::Element(VirtualNodeElement {
-        selector: String::from(selector),
-        data: data,
-        children: children,
-        element: None,
-        list_key: None,
-    })
-}
-
-pub fn t(text: &str) -> VirtualNode {
-    VirtualNode::Text(VirtualNodeText {
-        element: None,
-        text: String::from(text),
-    })
 }
 
 #[cfg(test)]
