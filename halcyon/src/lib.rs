@@ -9,7 +9,6 @@ pub mod props;
 mod store;
 mod vnode;
 
-pub use crate::dom::memory::{MemoryDOM, MemoryElement};
 pub use crate::extensions::attributes::Attributes;
 pub use crate::helpers::{h, t};
 pub use crate::props::{Prop, Props};
@@ -34,7 +33,7 @@ impl Halcyon {
         let halcyon_extra_key = halcyon.clone();
         halcyon.with(|h| {
             let mut h_mut = h.borrow_mut();
-            let t = h_mut.dom().query_selector(target);
+            let t = h_mut.dom().query_selector(target).expect("could not find target DOM element");
             // Get the body as our target element
             // Do initial render to element
             h_mut.init_render(t, node_renderer());
@@ -85,10 +84,21 @@ impl Halcyon {
             return;
         }
 
+        // Tell all extensions we are about to patch
         for e in self.extensions.iter() {
             e.pre();
         }
-        self.current_vnode = Some(new_vnode);
+
+        if let Some(old_node) = &self.current_vnode {
+            if old_node.same(&new_vnode) {
+                // If nodes look like they are the same
+            } else {
+                // If nodes look like they are completely different
+                //let parentElement = old_node.get_parent_element();
+            }
+        }
+
+        // tell all extensions patching is entirely complete
         for e in self.extensions.iter() {
             e.post();
         }

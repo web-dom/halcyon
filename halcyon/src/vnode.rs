@@ -6,6 +6,28 @@ pub enum VirtualNode {
     Text(VirtualNodeText),
 }
 
+impl VirtualNode {
+    pub fn same(&self,other:&VirtualNode) -> bool {
+        match self {
+            VirtualNode::Element(e) => match other {
+                VirtualNode::Element(oe) => e.list_key == oe.list_key  && e.selector == oe.selector,
+                _ => false
+            },
+            VirtualNode::Text(e) => match other {
+                VirtualNode::Text(oe) => e.text == oe.text,
+                _ => false
+            }
+        }
+    }
+
+    /*pub fn get_parent_element(&self) -> Option<Rc<Element>> {
+        match self {
+            VirtualNode::Element(e) => e.element.get_parent(),
+            VirtualNode::Text(e) => e.element.get_parent(),
+        }
+    }*/
+}
+
 impl<T> From<T> for VirtualNode
 where
     T: std::fmt::Display,

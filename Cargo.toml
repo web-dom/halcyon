@@ -3,6 +3,7 @@ members = [
     "halcyon",
     "halcyon_test",
     "halcyon_dom",
+    "halcyon_dom_memory",
     "halcyon_macro",
     "halcyon_macro_test",
     "examples/simple_store",

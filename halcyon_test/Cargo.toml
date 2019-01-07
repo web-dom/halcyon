@@ -7,3 +7,4 @@ edition = "2018"
 [dependencies]
 halcyon = {path="../halcyon"}
 halcyon_macro = {path="../halcyon_macro"}
+halcyon_dom_memory = {path="../halcyon_dom_memory"}

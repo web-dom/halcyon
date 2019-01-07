@@ -5,7 +5,5 @@ pub trait Element: Debug {
 }
 
 pub trait DOM: Debug {
-    fn query_selector(&self, selector: &str) -> Box<Element>;
+    fn query_selector(&self, selector: &str) -> Option<Box<Element>>;
 }
-
-pub mod memory;

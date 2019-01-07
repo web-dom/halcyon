@@ -22,14 +22,14 @@ impl Element for WebIDLElement {
 }
 
 impl DOM for WebIDLDOM {
-    fn query_selector(&self, selector: &str) -> Box<Element> {
+    fn query_selector(&self, selector: &str) -> Option<Box<Element>> {
         let window = web_sys::window().unwrap();
         let document = window.document().unwrap();
-        Box::new(WebIDLElement {
+        Some(Box::new(WebIDLElement {
             el: document
                 .query_selector(selector)
                 .expect("could not query selected element")
                 .expect("did not find selected element"),
-        })
+        }))
     }
 }
