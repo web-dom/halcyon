@@ -6,3 +6,4 @@ edition = "2018"
 
 [dependencies]
 halcyon = { "path"="../halcyon" }
+rctree = "0.2.1"

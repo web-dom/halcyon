@@ -17,7 +17,11 @@ pub struct WebIDLElement {
 
 impl Element for WebIDLElement {
     fn get_tag(&self) -> String {
-        self.el.tag_name()
+        self.el.tag_name().clone()
+    }
+
+    fn get_parent(&self) -> Option<Box<Element>> {
+        panic!("todo")
     }
 }
 
@@ -31,5 +35,9 @@ impl DOM for WebIDLDOM {
                 .expect("could not query selected element")
                 .expect("did not find selected element"),
         }))
+    }
+
+    fn create_text_node(&self, _txt: &str) -> Box<Element> {
+        panic!("not implemented");
     }
 }

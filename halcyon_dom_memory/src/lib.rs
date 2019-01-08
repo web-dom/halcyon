@@ -1,43 +1,68 @@
 use halcyon::{Element, DOM};
-
-type NodeHandle = usize;
+use rctree::Node;
 
 #[derive(Debug)]
-struct DOMData{
-    tag:String
+struct NodeData {
+    tag: String,
+    inner_text: Option<String>,
 }
 
 #[derive(Debug)]
 pub struct MemoryDOM {
-    root:NodeHandle,
-    nodes:Vec<DOMData>
+    root: Node<NodeData>,
 }
 
 impl MemoryDOM {
     pub fn new() -> Box<DOM> {
-        Box::new(MemoryDOM{
-            root:0,
-            nodes:vec![DOMData{tag:"body".to_string()}]
-        })
+        let mut md = Box::new(MemoryDOM {
+            root: Node::new(NodeData {
+                tag: "html".to_string(),
+                inner_text: None,
+            }),
+        });
+        md.root.append(Node::new(NodeData {
+            tag: "body".to_string(),
+            inner_text: None,
+        }));
+        md
     }
 }
 
 impl DOM for MemoryDOM {
     fn query_selector(&self, selector: &str) -> Option<Box<Element>> {
         if selector == "body" {
-            return Some(Box::new(MemoryElement{node:self.root}));
+            return match self.root.first_child() {
+                Some(fc) => Some(Box::new(MemoryElement { node: fc })),
+                None => None,
+            };
         }
-        panic!("not implemented yet")
+        panic!("not implemented query_selector");
+    }
+
+    fn create_text_node(&self, txt: &str) -> Box<Element> {
+        Box::new(MemoryElement {
+            node: Node::new(NodeData {
+                tag: "body".to_string(),
+                inner_text: Some(txt.to_string()),
+            }),
+        })
     }
 }
 
 #[derive(Debug)]
 pub struct MemoryElement {
-    node:NodeHandle
+    node: Node<NodeData>,
 }
 
 impl Element for MemoryElement {
     fn get_tag(&self) -> String {
-        return "div".to_string()
+        self.node.borrow().tag.clone()
+    }
+
+    fn get_parent(&self) -> Option<Box<Element>> {
+        match self.node.parent() {
+            Some(p) => Some(Box::new(MemoryElement { node: p })),
+            None => None,
+        }
     }
 }

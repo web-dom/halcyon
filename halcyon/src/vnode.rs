@@ -7,25 +7,38 @@ pub enum VirtualNode {
 }
 
 impl VirtualNode {
-    pub fn same(&self,other:&VirtualNode) -> bool {
+    pub fn same(&self, other: &VirtualNode) -> bool {
         match self {
             VirtualNode::Element(e) => match other {
-                VirtualNode::Element(oe) => e.list_key == oe.list_key  && e.selector == oe.selector,
-                _ => false
+                VirtualNode::Element(oe) => e.list_key == oe.list_key && e.selector == oe.selector,
+                _ => false,
             },
             VirtualNode::Text(e) => match other {
                 VirtualNode::Text(oe) => e.text == oe.text,
-                _ => false
-            }
+                _ => false,
+            },
         }
     }
 
-    /*pub fn get_parent_element(&self) -> Option<Rc<Element>> {
+    pub fn get_parent_element(&self) -> Option<Box<Element>> {
         match self {
-            VirtualNode::Element(e) => e.element.get_parent(),
-            VirtualNode::Text(e) => e.element.get_parent(),
+            VirtualNode::Element(e) => match &e.element {
+                Some(el) => el.get_parent(),
+                None => None,
+            },
+            VirtualNode::Text(e) => match &e.element {
+                Some(el) => el.get_parent(),
+                None => None,
+            },
         }
-    }*/
+    }
+
+    pub fn set_element(&mut self, element: Box<Element>) {
+        match self {
+            VirtualNode::Element(e) => e.element = Some(element),
+            VirtualNode::Text(e) => e.element = Some(element),
+        }
+    }
 }
 
 impl<T> From<T> for VirtualNode

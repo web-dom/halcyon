@@ -20,6 +20,7 @@ pub struct Halcyon {
     api: Box<DOM>,
     current_vnode: Option<VirtualNode>,
     extensions: Vec<Box<Extension>>,
+    inserted_vnodes: Vec<VirtualNode>,
 }
 
 impl Halcyon {
@@ -33,7 +34,10 @@ impl Halcyon {
         let halcyon_extra_key = halcyon.clone();
         halcyon.with(|h| {
             let mut h_mut = h.borrow_mut();
-            let t = h_mut.dom().query_selector(target).expect("could not find target DOM element");
+            let t = h_mut
+                .dom()
+                .query_selector(target)
+                .expect("could not find target DOM element");
             // Get the body as our target element
             // Do initial render to element
             h_mut.init_render(t, node_renderer());
@@ -54,7 +58,7 @@ impl Halcyon {
     pub fn root(&self) -> Option<&VirtualNode> {
         match self.current_vnode.as_ref() {
             Some(s) => Some(s),
-            None => None
+            None => None,
         }
     }
 
@@ -63,6 +67,7 @@ impl Halcyon {
             api: api,
             current_vnode: None,
             extensions: vec![Box::new(Attributes::new())],
+            inserted_vnodes: vec![],
         }
     }
 
@@ -71,6 +76,7 @@ impl Halcyon {
             api: api,
             current_vnode: None,
             extensions: extensions,
+            inserted_vnodes: vec![],
         }
     }
 
@@ -78,11 +84,21 @@ impl Halcyon {
         return &self.api;
     }
 
-    pub fn patch(&mut self, new_vnode: VirtualNode) {
+    pub fn create_element(&self, vnode: &mut VirtualNode) {
+        match &vnode {
+            VirtualNode::Element(el) => {}
+            VirtualNode::Text(tx) => {
+                vnode.set_element(self.api.create_text_node(&tx.text));
+            }
+        };
+    }
+
+    pub fn patch(&mut self, mut new_vnode: VirtualNode) {
         if let None = self.current_vnode {
             self.current_vnode = Some(new_vnode);
             return;
         }
+        self.inserted_vnodes.clear();
 
         // Tell all extensions we are about to patch
         for e in self.extensions.iter() {
@@ -94,7 +110,10 @@ impl Halcyon {
                 // If nodes look like they are the same
             } else {
                 // If nodes look like they are completely different
-                //let parentElement = old_node.get_parent_element();
+                let parent_element = old_node
+                    .get_parent_element()
+                    .expect("should always be a parent element");
+                self.create_element(&mut new_vnode);
             }
         }
 
