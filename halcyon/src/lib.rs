@@ -109,6 +109,9 @@ where
                 let children = el.children.as_mut().unwrap();
                 for i in 0..children.len() {
                     self.create_element(&mut children[i]);
+                    let created_element = children[i].get_element().expect("should have element we just created");
+                    let parent_element = el.element.as_mut().expect("parent should have element here");
+                    parent_element.append_child(created_element);
                 }
             }
         }
@@ -129,9 +132,7 @@ where
 
     pub fn patch(&mut self, mut new_vnode: VirtualNode<E>) {
         if let None = self.current_vnode {
-            println!("nothing exists {:?}", new_vnode);
             self.current_vnode = Some(new_vnode);
-            println!("!!! {:?}",self.current_vnode);
             return;
         }
         self.inserted_vnodes.clear();
@@ -161,7 +162,6 @@ where
         }
         if let Some(old_vnode) = self.current_vnode.as_mut() {
             if !old_vnode.same(&new_vnode) {
-                println!("should be removing!");
                 // if they were not the same
                 let e:&mut E = old_vnode.get_element_mut().expect("if its old it should have element");
                 e.remove();

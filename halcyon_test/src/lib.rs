@@ -21,6 +21,10 @@ mod tests {
             }
             _ => panic!("should not be none"),
         };
+        let html_element = &halcyon.dom().root;
+        assert_eq!("html",html_element.borrow().tag);
+        assert_eq!("div",html_element.first_child().unwrap().borrow().tag);
+        assert_eq!(true,html_element.first_child().unwrap().first_child().is_none());
     }
 
     #[test]
@@ -30,15 +34,19 @@ mod tests {
             .dom()
             .query_selector("body")
             .expect("there should be a body");
-        let c = html!(<div><h1>{"hello world!"}</h1></div>);
-        halcyon.init_render(body, c);
+        halcyon.init_render(body, html!(<div><h1>{"hello world!"}</h1></div>));
         let root = halcyon.root().expect("there should be a root element");
-        println!("{:?}", halcyon.dom().root.first_child().unwrap().first_child());
         match &root {
             VirtualNode::Element(r) => {
                 assert_eq!("div", r.selector, "selector should be div: {:?}", r);
             }
             _ => panic!("should not be none"),
         };
+        let html_element = &halcyon.dom().root;
+        assert_eq!("html",html_element.borrow().tag);
+        assert_eq!("div",html_element.first_child().unwrap().borrow().tag);
+        assert_eq!("h1",html_element.first_child().unwrap().first_child().unwrap().borrow().tag);
+        assert_eq!("!text",html_element.first_child().unwrap().first_child().unwrap().first_child().unwrap().borrow().tag);
+        assert_eq!("hello world!",html_element.first_child().unwrap().first_child().unwrap().first_child().unwrap().borrow().inner_text.as_ref().unwrap());
     }
 }

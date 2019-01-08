@@ -10,7 +10,6 @@ where
     E: Element,
 {
     fn pre(&self) {
-        println!("Attributes Extension::started")
     }
     fn create(&self, old_vnode: &VirtualNode<E>, new_vnode: &VirtualNode<E>) {
         update_attributes(old_vnode, new_vnode);
@@ -19,7 +18,6 @@ where
         update_attributes(old_vnode, new_vnode);
     }
     fn post(&self) {
-        println!("Attributes Extension::ended")
     }
 }
 

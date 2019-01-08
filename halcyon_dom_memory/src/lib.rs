@@ -3,8 +3,8 @@ use rctree::Node;
 
 #[derive(Debug)]
 pub struct NodeData {
-    tag: String,
-    inner_text: Option<String>,
+    pub tag: String,
+    pub inner_text: Option<String>,
 }
 
 #[derive(Debug)]
@@ -42,7 +42,7 @@ impl DOM<MemoryElement> for MemoryDOM {
     fn create_text_node(&self, txt: &str) -> MemoryElement {
         MemoryElement {
             node: Node::new(NodeData {
-                tag: "body".to_string(),
+                tag: "!text".to_string(),
                 inner_text: Some(txt.to_string()),
             }),
         }
@@ -95,5 +95,9 @@ impl Element for MemoryElement {
 
     fn remove(&mut self) {
         self.node.detach();
+    }
+
+    fn append_child(&mut self, element: &MemoryElement) {
+        self.node.append(element.node.clone());
     }
 }

@@ -59,8 +59,8 @@ impl Element {
         }
 
         TokenStream::from_str(&format!(
-            r#"halcyon::h("div", {}, {})"#,
-            attributes_token_stream, children_token_stream
+            r#"halcyon::h("{}", {}, {})"#,
+            self.tag,attributes_token_stream, children_token_stream
         ))
         .expect("invalid token stream")
     }
@@ -139,7 +139,6 @@ fn parse_element(
                                 },
                             ));
                         } else {
-                            println!("{:?}", next_token);
                             panic!("unexpected short end of element")
                         }
                     }

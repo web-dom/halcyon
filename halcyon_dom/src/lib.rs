@@ -39,6 +39,10 @@ impl Element for WebIDLElement {
     fn remove(&mut self) {
         panic!("not implemented");
     }
+
+    fn append_child(&mut self, _element: &WebIDLElement) {
+        panic("not implemented")
+    }
 }
 
 impl DOM<WebIDLElement> for WebIDLDOM {

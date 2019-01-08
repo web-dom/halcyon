@@ -4,8 +4,9 @@ pub trait Element: Debug + PartialEq + Sized {
     fn get_tag(&self) -> String;
     fn get_parent(&self) -> Option<Self>;
     fn next_sibling(&self) -> Option<Self>;
-    fn insert_before(&mut self, element_to_insert: &Self, target: Option<&mut Self>);
+    fn insert_before(&mut self, element: &Self, target: Option<&mut Self>);
     fn remove(&mut self);
+    fn append_child(&mut self, element: &Self);
 }
 
 pub trait DOM<E>: Debug
