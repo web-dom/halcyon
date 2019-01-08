@@ -2,7 +2,7 @@
 #[cfg(test)]
 mod tests {
     use halcyon::{Halcyon, VirtualNode};
-    use halcyon_dom_memory::{MemoryDOM, MemoryElement};
+    use halcyon_dom_memory::MemoryDOM;
     use halcyon_macro::html;
 
     #[test]

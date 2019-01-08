@@ -85,12 +85,23 @@ impl Halcyon {
     }
 
     pub fn create_element(&self, vnode: &mut VirtualNode) {
-        match &vnode {
-            VirtualNode::Element(el) => {}
-            VirtualNode::Text(tx) => {
-                vnode.set_element(self.api.create_text_node(&tx.text));
+        // if its a normal element
+        if let VirtualNode::Element(el) = &vnode {
+            vnode.set_element(self.api.create_node(&el.selector));
+        }
+        // then also create all its children
+        if let VirtualNode::Element(el) = vnode {
+            if el.children.is_some() {
+                let children = el.children.as_mut().unwrap();
+                for i in 0..children.len() {
+                    self.create_element(&mut children[i]);
+                }
             }
-        };
+        }
+        // if its text, create the text node
+        if let VirtualNode::Text(tx) = &vnode {
+            vnode.set_element(self.api.create_text_node(&tx.text));
+        }
     }
 
     pub fn patch(&mut self, mut new_vnode: VirtualNode) {
@@ -114,6 +125,9 @@ impl Halcyon {
                     .get_parent_element()
                     .expect("should always be a parent element");
                 self.create_element(&mut new_vnode);
+                let d = self.dom();
+                //let new_element = new_vnode.get_element();
+                //d.insert_before(parent,new_vnode.get_element(),d.next_sibling(old_node.get_element()))
             }
         }
 

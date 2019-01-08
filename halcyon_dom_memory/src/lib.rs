@@ -47,6 +47,15 @@ impl DOM for MemoryDOM {
             }),
         })
     }
+
+    fn create_node(&self, tag: &str) -> Box<Element> {
+        Box::new(MemoryElement {
+            node: Node::new(NodeData {
+                tag: tag.to_string(),
+                inner_text: None,
+            }),
+        })
+    }
 }
 
 #[derive(Debug)]

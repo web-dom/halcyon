@@ -40,4 +40,8 @@ impl DOM for WebIDLDOM {
     fn create_text_node(&self, _txt: &str) -> Box<Element> {
         panic!("not implemented");
     }
+
+    fn create_node(&self, _tag: &str) -> Box<Element> {
+        panic!("not implemented");
+    }
 }
