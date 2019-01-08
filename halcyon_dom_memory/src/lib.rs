@@ -13,13 +13,13 @@ pub struct MemoryDOM {
 }
 
 impl MemoryDOM {
-    pub fn new() -> Box<DOM> {
-        let mut md = Box::new(MemoryDOM {
+    pub fn new() -> MemoryDOM {
+        let mut md = MemoryDOM {
             root: Node::new(NodeData {
                 tag: "html".to_string(),
                 inner_text: None,
             }),
-        });
+        };
         md.root.append(Node::new(NodeData {
             tag: "body".to_string(),
             inner_text: None,
@@ -28,37 +28,37 @@ impl MemoryDOM {
     }
 }
 
-impl DOM for MemoryDOM {
-    fn query_selector(&self, selector: &str) -> Option<Box<Element>> {
+impl DOM<MemoryElement> for MemoryDOM {
+    fn query_selector(&self, selector: &str) -> Option<MemoryElement> {
         if selector == "body" {
             return match self.root.first_child() {
-                Some(fc) => Some(Box::new(MemoryElement { node: fc })),
+                Some(fc) => Some(MemoryElement { node: fc }),
                 None => None,
             };
         }
         panic!("not implemented query_selector");
     }
 
-    fn create_text_node(&self, txt: &str) -> Box<Element> {
-        Box::new(MemoryElement {
+    fn create_text_node(&self, txt: &str) -> MemoryElement {
+        MemoryElement {
             node: Node::new(NodeData {
                 tag: "body".to_string(),
                 inner_text: Some(txt.to_string()),
             }),
-        })
+        }
     }
 
-    fn create_node(&self, tag: &str) -> Box<Element> {
-        Box::new(MemoryElement {
+    fn create_node(&self, tag: &str) -> MemoryElement {
+        MemoryElement {
             node: Node::new(NodeData {
                 tag: tag.to_string(),
                 inner_text: None,
             }),
-        })
+        }
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct MemoryElement {
     node: Node<NodeData>,
 }
@@ -68,14 +68,14 @@ impl Element for MemoryElement {
         self.node.borrow().tag.clone()
     }
 
-    fn get_parent(&self) -> Option<Box<Element>> {
+    fn get_parent(&self) -> Option<MemoryElement> {
         match self.node.parent() {
-            Some(p) => Some(Box::new(MemoryElement { node: p })),
+            Some(p) => Some(MemoryElement { node: p }),
             None => None,
         }
     }
 
-    fn next_sibling(&self) -> Option<&Box<Element>> {
+    fn next_sibling(&self) -> Option<MemoryElement> {
         panic!("not implemented");
     }
 }

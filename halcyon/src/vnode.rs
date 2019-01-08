@@ -1,13 +1,16 @@
 use crate::{t, Element, Props};
 
 #[derive(Debug, PartialEq)]
-pub enum VirtualNode {
-    Element(VirtualNodeElement),
-    Text(VirtualNodeText),
+pub enum VirtualNode<E: Element> {
+    Element(VirtualNodeElement<E>),
+    Text(VirtualNodeText<E>),
 }
 
-impl VirtualNode {
-    pub fn same(&self, other: &VirtualNode) -> bool {
+impl<E> VirtualNode<E>
+where
+    E: Element,
+{
+    pub fn same(&self, other: &VirtualNode<E>) -> bool {
         match self {
             VirtualNode::Element(e) => match other {
                 VirtualNode::Element(oe) => e.list_key == oe.list_key && e.selector == oe.selector,
@@ -20,7 +23,7 @@ impl VirtualNode {
         }
     }
 
-    pub fn get_parent_element(&self) -> Option<Box<Element>> {
+    pub fn get_parent_element(&self) -> Option<E> {
         match self {
             VirtualNode::Element(e) => match &e.element {
                 Some(el) => el.get_parent(),
@@ -33,14 +36,14 @@ impl VirtualNode {
         }
     }
 
-    pub fn set_element(&mut self, element: Box<Element>) {
+    pub fn set_element(&mut self, element: E) {
         match self {
             VirtualNode::Element(e) => e.element = Some(element),
             VirtualNode::Text(e) => e.element = Some(element),
         }
     }
 
-    pub fn get_element(&self) -> Option<&Box<Element>> {
+    pub fn get_element(&self) -> Option<&E> {
         match self {
             VirtualNode::Element(e) => match e.element.as_ref() {
                 Some(el) => Some(el),
@@ -54,17 +57,21 @@ impl VirtualNode {
     }
 }
 
-impl<T> From<T> for VirtualNode
+impl<T, E> From<T> for VirtualNode<E>
 where
     T: std::fmt::Display,
+    E: Element,
 {
-    fn from(v: T) -> VirtualNode {
+    fn from(v: T) -> VirtualNode<E> {
         t(&format!("{}", v))
     }
 }
 
-impl VirtualNode {
-    pub fn from_element(e: Box<Element>) -> VirtualNode {
+impl<E> VirtualNode<E>
+where
+    E: Element,
+{
+    pub fn from_element(e: E) -> VirtualNode<E> {
         VirtualNode::Element(VirtualNodeElement {
             selector: String::from("div"),
             data: None,
@@ -76,16 +83,19 @@ impl VirtualNode {
 }
 
 #[derive(Debug)]
-pub struct VirtualNodeElement {
+pub struct VirtualNodeElement<E: Element> {
     pub selector: String,
     pub data: Option<Props>,
-    pub children: Option<Vec<VirtualNode>>,
-    pub element: Option<Box<Element>>,
+    pub children: Option<Vec<VirtualNode<E>>>,
+    pub element: Option<E>,
     pub list_key: Option<String>,
 }
 
-impl PartialEq for VirtualNodeElement {
-    fn eq(&self, other: &VirtualNodeElement) -> bool {
+impl<E> PartialEq for VirtualNodeElement<E>
+where
+    E: Element,
+{
+    fn eq(&self, other: &VirtualNodeElement<E>) -> bool {
         self.selector == other.selector
             && self.data == other.data
             && self.list_key == other.list_key
@@ -94,13 +104,16 @@ impl PartialEq for VirtualNodeElement {
 }
 
 #[derive(Debug)]
-pub struct VirtualNodeText {
-    pub element: Option<Box<Element>>,
+pub struct VirtualNodeText<E: Element> {
+    pub element: Option<E>,
     pub text: String,
 }
 
-impl PartialEq for VirtualNodeText {
-    fn eq(&self, other: &VirtualNodeText) -> bool {
+impl<E> PartialEq for VirtualNodeText<E>
+where
+    E: Element,
+{
+    fn eq(&self, other: &VirtualNodeText<E>) -> bool {
         self.text == other.text
     }
 }

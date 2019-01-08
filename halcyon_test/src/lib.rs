@@ -1,13 +1,14 @@
 #![feature(proc_macro_hygiene)]
 #[cfg(test)]
 mod tests {
+    use halcyon::dom::DOM;
     use halcyon::{Halcyon, VirtualNode};
-    use halcyon_dom_memory::MemoryDOM;
+    use halcyon_dom_memory::{MemoryDOM, MemoryElement};
     use halcyon_macro::html;
 
     #[test]
     fn simplest() {
-        let mut halcyon = Halcyon::new(MemoryDOM::new());
+        let mut halcyon = Halcyon::<MemoryDOM, MemoryElement>::new(MemoryDOM::new());
         let body = halcyon
             .dom()
             .query_selector("body")

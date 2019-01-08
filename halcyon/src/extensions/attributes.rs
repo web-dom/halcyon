@@ -1,17 +1,21 @@
+use crate::dom::Element;
 use crate::extensions::Extension;
 use crate::VirtualNode;
 
 #[derive(Debug)]
 pub struct Attributes {}
 
-impl Extension for Attributes {
+impl<E> Extension<E> for Attributes
+where
+    E: Element,
+{
     fn pre(&self) {
         println!("Attributes Extension::started")
     }
-    fn create(&self, old_vnode: &VirtualNode, new_vnode: &VirtualNode) {
+    fn create(&self, old_vnode: &VirtualNode<E>, new_vnode: &VirtualNode<E>) {
         update_attributes(old_vnode, new_vnode);
     }
-    fn update(&self, old_vnode: &VirtualNode, new_vnode: &VirtualNode) {
+    fn update(&self, old_vnode: &VirtualNode<E>, new_vnode: &VirtualNode<E>) {
         update_attributes(old_vnode, new_vnode);
     }
     fn post(&self) {
@@ -25,4 +29,8 @@ impl Attributes {
     }
 }
 
-fn update_attributes(_old_vnode: &VirtualNode, _new_vnode: &VirtualNode) {}
+fn update_attributes<E>(_old_vnode: &VirtualNode<E>, _new_vnode: &VirtualNode<E>)
+where
+    E: Element,
+{
+}

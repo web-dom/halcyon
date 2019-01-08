@@ -1,6 +1,14 @@
+use crate::dom::Element;
 use crate::{Props, VirtualNode, VirtualNodeElement, VirtualNodeText};
 
-pub fn h(selector: &str, data: Option<Props>, children: Option<Vec<VirtualNode>>) -> VirtualNode {
+pub fn h<E>(
+    selector: &str,
+    data: Option<Props>,
+    children: Option<Vec<VirtualNode<E>>>,
+) -> VirtualNode<E>
+where
+    E: Element,
+{
     VirtualNode::Element(VirtualNodeElement {
         selector: String::from(selector),
         data: data,
@@ -10,7 +18,10 @@ pub fn h(selector: &str, data: Option<Props>, children: Option<Vec<VirtualNode>>
     })
 }
 
-pub fn t(text: &str) -> VirtualNode {
+pub fn t<E>(text: &str) -> VirtualNode<E>
+where
+    E: Element,
+{
     VirtualNode::Text(VirtualNodeText {
         element: None,
         text: String::from(text),

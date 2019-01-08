@@ -16,16 +16,20 @@ pub use crate::store::{Reducer, Store};
 pub use crate::vnode::{VirtualNode, VirtualNodeElement, VirtualNodeText};
 
 #[derive(Debug)]
-pub struct Halcyon {
-    api: Box<DOM>,
-    current_vnode: Option<VirtualNode>,
-    extensions: Vec<Box<Extension>>,
-    inserted_vnodes: Vec<VirtualNode>,
+pub struct Halcyon<D: DOM<E>, E: Element> {
+    api: D,
+    current_vnode: Option<VirtualNode<E>>,
+    extensions: Vec<Box<Extension<E>>>,
+    inserted_vnodes: Vec<VirtualNode<E>>,
 }
 
-impl Halcyon {
-    pub fn setup<T: Clone + Reducer<P>, P, Q: 'static + Fn() -> VirtualNode>(
-        halcyon: &'static std::thread::LocalKey<RefCell<Halcyon>>,
+impl<D, E> Halcyon<D, E>
+where
+    D: DOM<E>,
+    E: Element,
+{
+    pub fn setup<T: Clone + Reducer<P>, P, Q: 'static + Fn() -> VirtualNode<E>>(
+        halcyon: &'static std::thread::LocalKey<RefCell<Halcyon<D, E>>>,
         store: &'static std::thread::LocalKey<RefCell<Store<T, P>>>,
         target: &str,
         render: Q,
@@ -55,14 +59,18 @@ impl Halcyon {
         });
     }
 
-    pub fn root(&self) -> Option<&VirtualNode> {
+    pub fn root(&self) -> Option<&VirtualNode<E>> {
         match self.current_vnode.as_ref() {
             Some(s) => Some(s),
             None => None,
         }
     }
 
-    pub fn new(api: Box<DOM>) -> Halcyon {
+    pub fn new<M, N>(api: M) -> Halcyon<M, N>
+    where
+        M: DOM<N>,
+        N: Element,
+    {
         Halcyon {
             api: api,
             current_vnode: None,
@@ -71,7 +79,11 @@ impl Halcyon {
         }
     }
 
-    pub fn custom(api: Box<DOM>, extensions: Vec<Box<Extension>>) -> Halcyon {
+    pub fn custom<M, N>(api: M, extensions: Vec<Box<Extension<N>>>) -> Halcyon<M, N>
+    where
+        M: DOM<N>,
+        N: Element,
+    {
         Halcyon {
             api: api,
             current_vnode: None,
@@ -80,11 +92,11 @@ impl Halcyon {
         }
     }
 
-    pub fn dom(&self) -> &'_ Box<DOM> {
+    pub fn dom(&self) -> &'_ D {
         return &self.api;
     }
 
-    pub fn create_element(&self, vnode: &mut VirtualNode) {
+    pub fn create_element(&self, vnode: &mut VirtualNode<E>) {
         // if its a normal element
         if let VirtualNode::Element(el) = &vnode {
             vnode.set_element(self.api.create_node(&el.selector));
@@ -104,7 +116,7 @@ impl Halcyon {
         }
     }
 
-    pub fn patch(&mut self, mut new_vnode: VirtualNode) {
+    pub fn patch(&mut self, mut new_vnode: VirtualNode<E>) {
         if let None = self.current_vnode {
             self.current_vnode = Some(new_vnode);
             return;
@@ -143,12 +155,12 @@ impl Halcyon {
         }
     }
 
-    pub fn init_render(&mut self, element: Box<Element>, container: VirtualNode) {
+    pub fn init_render(&mut self, element: E, container: VirtualNode<E>) {
         self.patch(VirtualNode::from_element(element));
         self.patch(container);
     }
 
-    pub fn render(&mut self, container: VirtualNode) {
+    pub fn render(&mut self, container: VirtualNode<E>) {
         self.patch(container);
     }
 }

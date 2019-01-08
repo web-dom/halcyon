@@ -1,6 +1,6 @@
 #![feature(proc_macro_hygiene)]
 use halcyon::{Halcyon, Reducer, Store, VirtualNode};
-use halcyon_dom::WebIDLDOM;
+use halcyon_dom::{WebIDLDOM, WebIDLElement};
 use halcyon_macro::html;
 use std::cell::RefCell;
 use std::rc::Rc;
@@ -42,7 +42,7 @@ impl Reducer<Actions> for Rc<Counter> {
 thread_local! { static STORE : RefCell<Store<Rc<Counter>, Actions>> = RefCell::new(Store::new(Rc::new(Counter{count:0}))); }
 
 // Our counter component
-fn counter() -> VirtualNode {
+fn counter() -> VirtualNode<WebIDLElement> {
     Store::connect(&STORE, |state, dispatch| {
         let dispatcher_increment = dispatch.clone();
         let dispatcher_decrement = dispatch.clone();
@@ -67,7 +67,7 @@ fn counter() -> VirtualNode {
 #[wasm_bindgen(start)]
 pub fn run() -> Result<(), JsValue> {
     thread_local! {
-        static HALCYON:RefCell<Halcyon> = RefCell::new(Halcyon::new(WebIDLDOM::new()));
+        static HALCYON:RefCell<Halcyon<WebIDLDOM,WebIDLElement>> = RefCell::new(Halcyon::<WebIDLDOM,WebIDLElement>::new(WebIDLDOM::new()));
     };
     // Setup Halcyon:
     // 1. runs initial render to target query selector Element

@@ -1,3 +1,4 @@
+use crate::dom::Element;
 use crate::VirtualNode;
 use std::fmt::Debug;
 
@@ -14,16 +15,19 @@ remove	an element is directly being removed from the DOM	VirtualNode, removeCall
 post	the patch process is done	none
 */
 
-pub trait Extension: Debug {
+pub trait Extension<E>: Debug
+where
+    E: Element,
+{
     fn pre(&self) {}
-    fn init(&self, _vnode: &VirtualNode) {}
-    fn create(&self, _empty_vnode: &VirtualNode, _new_vnode: &VirtualNode) {}
-    fn insert(&self, _vnode: &VirtualNode) {}
-    fn pre_patch(&self, _old_vnode: &VirtualNode, _new_vnode: &VirtualNode) {}
-    fn update(&self, _old_vnode: &VirtualNode, _new_vnode: &VirtualNode) {}
-    fn handle(&self, _old_vnode: &VirtualNode, _new_vnode: &VirtualNode) {}
-    fn destroy(&self, _vnode: &VirtualNode) {}
-    fn remove(&self, _vnode: &VirtualNode) {}
+    fn init(&self, _vnode: &VirtualNode<E>) {}
+    fn create(&self, _empty_vnode: &VirtualNode<E>, _new_vnode: &VirtualNode<E>) {}
+    fn insert(&self, _vnode: &VirtualNode<E>) {}
+    fn pre_patch(&self, _old_vnode: &VirtualNode<E>, _new_vnode: &VirtualNode<E>) {}
+    fn update(&self, _old_vnode: &VirtualNode<E>, _new_vnode: &VirtualNode<E>) {}
+    fn handle(&self, _old_vnode: &VirtualNode<E>, _new_vnode: &VirtualNode<E>) {}
+    fn destroy(&self, _vnode: &VirtualNode<E>) {}
+    fn remove(&self, _vnode: &VirtualNode<E>) {}
     fn post(&self) {}
 }
 

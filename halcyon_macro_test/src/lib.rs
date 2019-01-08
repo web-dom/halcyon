@@ -1,15 +1,14 @@
 #![feature(proc_macro_hygiene)]
-#[allow(unused_imports)]
-extern crate halcyon;
-#[macro_use]
-#[allow(unused_imports)]
-extern crate halcyon_macro;
 
 #[cfg(test)]
 mod tests {
+    use halcyon::VirtualNode;
+    use halcyon_dom_memory::MemoryElement;
+    use halcyon_macro::html;
+
     #[test]
     fn basic_element() {
-        let expected = halcyon::h("div", None, None);
+        let expected: VirtualNode<MemoryElement> = halcyon::h("div", None, None);
         let result = html! {
             <div></div>
         };
@@ -18,7 +17,7 @@ mod tests {
 
     #[test]
     fn small_element() {
-        let expected = halcyon::h("div", None, None);
+        let expected: VirtualNode<MemoryElement> = halcyon::h("div", None, None);
         let result = html! {
             <div/>
         };
@@ -27,7 +26,8 @@ mod tests {
 
     #[test]
     fn simple_child() {
-        let expected = halcyon::h("div", None, Some(vec![halcyon::h("div", None, None)]));
+        let expected: VirtualNode<MemoryElement> =
+            halcyon::h("div", None, Some(vec![halcyon::h("div", None, None)]));
         let result = html! {
             <div><div/></div>
         };
@@ -36,7 +36,8 @@ mod tests {
 
     #[test]
     fn simple_code_child() {
-        let expected = halcyon::h("div", None, Some(vec![halcyon::t("hello world")]));
+        let expected: VirtualNode<MemoryElement> =
+            halcyon::h("div", None, Some(vec![halcyon::t("hello world")]));
         let result = html! {
             <div>{"hello world"}</div>
         };
@@ -45,7 +46,7 @@ mod tests {
 
     #[test]
     fn basic_text_attribute() {
-        let expected = halcyon::h(
+        let expected: VirtualNode<MemoryElement> = halcyon::h(
             "div",
             Some({
                 let mut h = halcyon::Props::new();
@@ -62,7 +63,7 @@ mod tests {
 
     #[test]
     fn multiple_text_attribute() {
-        let expected = halcyon::h(
+        let expected: VirtualNode<MemoryElement> = halcyon::h(
             "div",
             Some({
                 let mut h = halcyon::Props::new();
@@ -80,7 +81,7 @@ mod tests {
 
     #[test]
     fn basic_code_attribute() {
-        let expected = halcyon::h(
+        let expected: VirtualNode<MemoryElement> = halcyon::h(
             "div",
             Some({
                 let mut h = halcyon::Props::new();
@@ -97,7 +98,7 @@ mod tests {
 
     #[test]
     fn basic_string_attribute() {
-        let expected = halcyon::h(
+        let expected: VirtualNode<MemoryElement> = halcyon::h(
             "div",
             Some({
                 let mut h = halcyon::Props::new();

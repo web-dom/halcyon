@@ -5,8 +5,8 @@ use halcyon::{Element, DOM};
 pub struct WebIDLDOM {}
 
 impl WebIDLDOM {
-    pub fn new() -> Box<DOM> {
-        Box::new(WebIDLDOM {})
+    pub fn new() -> WebIDLDOM {
+        WebIDLDOM {}
     }
 }
 
@@ -20,32 +20,38 @@ impl Element for WebIDLElement {
         self.el.tag_name().clone()
     }
 
-    fn get_parent(&self) -> Option<Box<Element>> {
+    fn get_parent(&self) -> Option<WebIDLElement> {
         panic!("todo")
     }
 
-    fn next_sibling(&self) -> Option<&Box<Element>> {
+    fn next_sibling(&self) -> Option<WebIDLElement> {
         panic!("not implemented")
     }
 }
 
-impl DOM for WebIDLDOM {
-    fn query_selector(&self, selector: &str) -> Option<Box<Element>> {
+impl DOM<WebIDLElement> for WebIDLDOM {
+    fn query_selector(&self, selector: &str) -> Option<WebIDLElement> {
         let window = web_sys::window().unwrap();
         let document = window.document().unwrap();
-        Some(Box::new(WebIDLElement {
+        Some(WebIDLElement {
             el: document
                 .query_selector(selector)
                 .expect("could not query selected element")
                 .expect("did not find selected element"),
-        }))
+        })
     }
 
-    fn create_text_node(&self, _txt: &str) -> Box<Element> {
+    fn create_text_node(&self, _txt: &str) -> WebIDLElement {
         panic!("not implemented");
     }
 
-    fn create_node(&self, _tag: &str) -> Box<Element> {
+    fn create_node(&self, _tag: &str) -> WebIDLElement {
         panic!("not implemented");
+    }
+}
+
+impl PartialEq for WebIDLElement {
+    fn eq(&self, _other: &WebIDLElement) -> bool {
+        true
     }
 }
