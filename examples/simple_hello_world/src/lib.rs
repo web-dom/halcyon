@@ -24,7 +24,7 @@ pub fn run() -> Result<(), JsValue> {
     let mut halcyon = Halcyon::<WebIDLDOM, WebIDLElement>::new(WebIDLDOM::new());
 
     // Gets a handle to the body
-    let body = halcyon.dom().query_selector("body").unwrap();
+    let body = halcyon.dom().query_selector("body").expect("body should exist");
 
     // Renders out the initial component's virtual dom to the body
     halcyon.init_render(body, hello_world());

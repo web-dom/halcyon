@@ -27,6 +27,10 @@ impl Element for WebIDLElement {
     fn next_sibling(&self) -> Option<WebIDLElement> {
         panic!("not implemented")
     }
+
+    fn insert_before(&mut self, _element_to_insert:&WebIDLElement,_target:Option<&WebIDLElement>) {
+        panic!("not implemented")
+    }
 }
 
 impl DOM<WebIDLElement> for WebIDLDOM {

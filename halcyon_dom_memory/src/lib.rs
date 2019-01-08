@@ -76,6 +76,17 @@ impl Element for MemoryElement {
     }
 
     fn next_sibling(&self) -> Option<MemoryElement> {
-        panic!("not implemented");
+        match self.node.next_sibling() {
+            Some(s) => Some(MemoryElement{node:s}),
+            None => None
+        }
+    }
+
+    fn insert_before(&mut self, element_to_insert:&MemoryElement, target:Option<&MemoryElement>) {
+        match target.as_ref() {
+            Some(t) => t.node.clone().insert_before(element_to_insert.node.clone()),
+            None => self.node.append(element_to_insert.node.clone())
+        }
+
     }
 }

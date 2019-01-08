@@ -135,11 +135,10 @@ where
                 // If nodes look like they are the same
             } else {
                 // If nodes look like they are completely different
-                let parent_element = old_node
+                let mut parent_element = old_node
                     .get_parent_element()
                     .expect("should always be a parent element");
                 self.create_element(&mut new_vnode);
-                let d = self.dom();
                 let new_element = new_vnode
                     .get_element()
                     .expect("this should have element because we just made them");
@@ -147,7 +146,7 @@ where
                     .get_element()
                     .expect("this should have element because it was put up on screen");
                 let old_next_sibling = old_element.next_sibling();
-                //parent.insert_before(new-element,next_old_sibling)
+                parent_element.insert_before(new_element,old_next_sibling.as_ref());
             }
         }
 
