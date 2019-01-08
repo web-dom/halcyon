@@ -132,8 +132,8 @@ impl Halcyon {
                 let old_element = old_node
                     .get_element()
                     .expect("this should have element because it was put up on screen");
-                let next_old_sibling = d.next_sibling(old_element);
-                //d.insert_before(parent,new-element,)
+                let old_next_sibling = old_element.next_sibling();
+                //parent.insert_before(new-element,next_old_sibling)
             }
         }
 
