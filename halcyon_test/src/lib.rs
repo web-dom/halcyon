@@ -1,7 +1,7 @@
 #![feature(proc_macro_hygiene)]
 #[cfg(test)]
 mod tests {
-    use halcyon::dom::DOM;
+    use halcyon::DOM;
     use halcyon::{Halcyon, VirtualNode};
     use halcyon_dom_memory::{MemoryDOM, MemoryElement};
     use halcyon_macro::html;

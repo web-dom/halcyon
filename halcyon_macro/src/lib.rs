@@ -1,6 +1,8 @@
 extern crate proc_macro;
 
 use proc_macro::{Group, TokenStream, TokenTree};
+use std::error::Error;
+use std::iter::Peekable;
 use std::str::FromStr;
 
 #[derive(Debug)]
@@ -83,11 +85,8 @@ struct Attribute {
 }
 
 fn parse_attribute(
-    mut tokens_iter: std::iter::Peekable<proc_macro::token_stream::IntoIter>,
-) -> (
-    std::iter::Peekable<proc_macro::token_stream::IntoIter>,
-    Attribute,
-) {
+    mut tokens_iter: Peekable<proc_macro::token_stream::IntoIter>,
+) -> (Peekable<proc_macro::token_stream::IntoIter>, Attribute) {
     if let Some(TokenTree::Ident(name)) = tokens_iter.next() {
         if let Some(TokenTree::Punct(t)) = tokens_iter.next() {
             if t.to_string() == "=" {
@@ -118,14 +117,8 @@ fn parse_attribute(
 }
 
 fn parse_element(
-    mut tokens_iter: std::iter::Peekable<proc_macro::token_stream::IntoIter>,
-) -> Result<
-    (
-        std::iter::Peekable<proc_macro::token_stream::IntoIter>,
-        Element,
-    ),
-    Box<std::error::Error>,
-> {
+    mut tokens_iter: Peekable<proc_macro::token_stream::IntoIter>,
+) -> Result<(Peekable<proc_macro::token_stream::IntoIter>, Element), Box<Error>> {
     if let Some(TokenTree::Ident(tag)) = tokens_iter.next() {
         let mut attributes: Vec<Attribute> = vec![];
         loop {

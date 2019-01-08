@@ -1,4 +1,5 @@
 use crate::{t, Element, Props};
+use std::fmt::Display;
 
 #[derive(Debug, PartialEq)]
 pub enum VirtualNode<E: Element> {
@@ -59,7 +60,7 @@ where
 
 impl<T, E> From<T> for VirtualNode<E>
 where
-    T: std::fmt::Display,
+    T: Display,
     E: Element,
 {
     fn from(v: T) -> VirtualNode<E> {

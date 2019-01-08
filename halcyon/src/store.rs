@@ -1,11 +1,14 @@
+use std::cell::Ref;
 use std::cell::RefCell;
 use std::marker::PhantomData;
+use std::marker::Sized;
 use std::rc::Rc;
+use std::thread::LocalKey;
 
 pub trait Reducer<P> {
     fn reduce(&self, action: P) -> Option<Self>
     where
-        Self: std::marker::Sized;
+        Self: Sized;
 }
 
 pub struct Store<T, P>
@@ -30,7 +33,7 @@ where
     }
 
     pub fn connect<V, Q: Fn(T, Rc<Fn(P)>) -> V>(
-        store_thread_key: &'static std::thread::LocalKey<RefCell<Store<T, P>>>,
+        store_thread_key: &'static LocalKey<RefCell<Store<T, P>>>,
         handler: Q,
     ) -> V {
         store_thread_key.with(|store| {
@@ -55,7 +58,7 @@ where
         self.listeners.borrow_mut().push(listener)
     }
 
-    pub fn state(&self) -> std::cell::Ref<T> {
+    pub fn state(&self) -> Ref<T> {
         self.state.borrow()
     }
 }

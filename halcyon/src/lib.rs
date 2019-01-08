@@ -2,10 +2,12 @@ pub use crate::dom::{Element, DOM};
 use crate::extensions::Extension;
 use std::cell::RefCell;
 use std::rc::Rc;
-pub mod dom;
-pub mod extensions;
+use std::thread::LocalKey;
+
+mod dom;
+mod extensions;
 mod helpers;
-pub mod props;
+mod props;
 mod store;
 mod vnode;
 
@@ -29,8 +31,8 @@ where
     E: Element,
 {
     pub fn setup<T: Clone + Reducer<P>, P, Q: 'static + Fn() -> VirtualNode<E>>(
-        halcyon: &'static std::thread::LocalKey<RefCell<Halcyon<D, E>>>,
-        store: &'static std::thread::LocalKey<RefCell<Store<T, P>>>,
+        halcyon: &'static LocalKey<RefCell<Halcyon<D, E>>>,
+        store: &'static LocalKey<RefCell<Store<T, P>>>,
         target: &str,
         render: Q,
     ) {

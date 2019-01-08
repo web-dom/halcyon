@@ -1,6 +1,6 @@
 #![feature(proc_macro_hygiene)]
 // Basics we need for halcyon
-use halcyon::dom::DOM;
+use halcyon::DOM;
 use halcyon::{Halcyon, VirtualNode};
 // A DOM interface using WebIDL
 use halcyon_dom::{WebIDLDOM, WebIDLElement};
