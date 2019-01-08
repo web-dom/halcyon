@@ -31,9 +31,13 @@ impl Element for WebIDLElement {
     fn insert_before(
         &mut self,
         _element_to_insert: &WebIDLElement,
-        _target: Option<&WebIDLElement>,
+        _target: Option<&mut WebIDLElement>,
     ) {
         panic!("not implemented")
+    }
+
+    fn remove(&mut self) {
+        panic!("not implemented");
     }
 }
 

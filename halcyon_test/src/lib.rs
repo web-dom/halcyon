@@ -6,6 +6,7 @@ mod tests {
     use halcyon_dom_memory::{MemoryDOM, MemoryElement};
     use halcyon_macro::html;
 
+    #[test]
     fn simplest() {
         let mut halcyon = Halcyon::<MemoryDOM, MemoryElement>::new(MemoryDOM::new());
         let body = halcyon
@@ -32,7 +33,7 @@ mod tests {
         let c = html!(<div><h1>{"hello world!"}</h1></div>);
         halcyon.init_render(body, c);
         let root = halcyon.root().expect("there should be a root element");
-        println!("{:?}", root.get_element().unwrap().node);
+        println!("{:?}", halcyon.dom().root.first_child().unwrap().first_child());
         match &root {
             VirtualNode::Element(r) => {
                 assert_eq!("div", r.selector, "selector should be div: {:?}", r);

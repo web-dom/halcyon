@@ -9,7 +9,7 @@ pub struct NodeData {
 
 #[derive(Debug)]
 pub struct MemoryDOM {
-    root: Node<NodeData>,
+    pub root: Node<NodeData>,
 }
 
 impl MemoryDOM {
@@ -82,10 +82,18 @@ impl Element for MemoryElement {
         }
     }
 
-    fn insert_before(&mut self, element_to_insert: &MemoryElement, target: Option<&MemoryElement>) {
-        match target.as_ref() {
-            Some(t) => t.node.clone().insert_before(element_to_insert.node.clone()),
+    fn insert_before(
+        &mut self,
+        element_to_insert: &MemoryElement,
+        target: Option<&mut MemoryElement>,
+    ) {
+        match target {
+            Some(t) => t.node.insert_before(element_to_insert.node.clone()),
             None => self.node.append(element_to_insert.node.clone()),
         }
+    }
+
+    fn remove(&mut self) {
+        self.node.detach();
     }
 }

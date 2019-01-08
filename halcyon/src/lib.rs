@@ -118,10 +118,20 @@ where
         }
     }
 
+    /*fn remove_vnodes(&self, parent_element: E, vnodes: Vec<&mut VirtualNode<E>>, start: usize, end: usize) {
+        for i in start..end {
+            match vnodes[i] {
+                VirtualNode::Element(el) => (),
+                VirtualNode::Text(el) => vnodes[i].get_element().expect("if we are removing, it should have element").remove(),
+            }
+        }
+    }*/
+
     pub fn patch(&mut self, mut new_vnode: VirtualNode<E>) {
         if let None = self.current_vnode {
             println!("nothing exists {:?}", new_vnode);
             self.current_vnode = Some(new_vnode);
+            println!("!!! {:?}",self.current_vnode);
             return;
         }
         self.inserted_vnodes.clear();
@@ -130,23 +140,32 @@ where
         for e in self.extensions.iter() {
             e.pre();
         }
-        if let Some(old_node) = &self.current_vnode {
-            if old_node.same(&new_vnode) {
+        if let Some(old_vnode) = self.current_vnode.as_ref() {
+            if old_vnode.same(&new_vnode) {
                 // If nodes look like they are the same
             } else {
                 // If nodes look like they are completely different
-                let mut parent_element = old_node
+                let mut parent_element = old_vnode
                     .get_parent_element()
                     .expect("should always be a parent element");
                 self.create_element(&mut new_vnode);
                 let new_element = new_vnode
                     .get_element()
                     .expect("this should have element because we just made them");
-                let old_element = old_node
+                let old_element = old_vnode
                     .get_element()
                     .expect("this should have element because it was put up on screen");
-                let old_next_sibling = old_element.next_sibling();
-                parent_element.insert_before(new_element, old_next_sibling.as_ref());
+                let mut old_next_sibling = old_element.next_sibling();
+                parent_element.insert_before(new_element, old_next_sibling.as_mut());
+            }
+        }
+        if let Some(old_vnode) = self.current_vnode.as_mut() {
+            if !old_vnode.same(&new_vnode) {
+                println!("should be removing!");
+                // if they were not the same
+                let e:&mut E = old_vnode.get_element_mut().expect("if its old it should have element");
+                e.remove();
+                self.current_vnode = Some(new_vnode);
             }
         }
 

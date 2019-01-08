@@ -56,6 +56,19 @@ where
             },
         }
     }
+
+    pub fn get_element_mut(&mut self) -> Option<&mut E> {
+        match self {
+            VirtualNode::Element(e) => match e.element.as_mut() {
+                Some(el) => Some(el),
+                None => None,
+            },
+            VirtualNode::Text(e) => match e.element.as_mut() {
+                Some(el) => Some(el),
+                None => None,
+            },
+        }
+    }
 }
 
 impl<T, E> From<T> for VirtualNode<E>
