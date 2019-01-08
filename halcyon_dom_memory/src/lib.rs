@@ -56,6 +56,10 @@ impl DOM for MemoryDOM {
             }),
         })
     }
+
+    fn next_sibling(&self, el: &Box<Element>) -> Option<&Box<Element>> {
+        panic!("not implemented");
+    }
 }
 
 #[derive(Debug)]

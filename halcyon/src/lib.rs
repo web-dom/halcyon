@@ -126,8 +126,14 @@ impl Halcyon {
                     .expect("should always be a parent element");
                 self.create_element(&mut new_vnode);
                 let d = self.dom();
-                //let new_element = new_vnode.get_element();
-                //d.insert_before(parent,new_vnode.get_element(),d.next_sibling(old_node.get_element()))
+                let new_element = new_vnode
+                    .get_element()
+                    .expect("this should have element because we just made them");
+                let old_element = old_node
+                    .get_element()
+                    .expect("this should have element because it was put up on screen");
+                let next_old_sibling = d.next_sibling(old_element);
+                //d.insert_before(parent,new-element,)
             }
         }
 

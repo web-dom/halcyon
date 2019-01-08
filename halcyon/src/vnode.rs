@@ -39,6 +39,19 @@ impl VirtualNode {
             VirtualNode::Text(e) => e.element = Some(element),
         }
     }
+
+    pub fn get_element(&self) -> Option<&Box<Element>> {
+        match self {
+            VirtualNode::Element(e) => match e.element.as_ref() {
+                Some(el) => Some(el),
+                None => None,
+            },
+            VirtualNode::Text(e) => match e.element.as_ref() {
+                Some(el) => Some(el),
+                None => None,
+            },
+        }
+    }
 }
 
 impl<T> From<T> for VirtualNode

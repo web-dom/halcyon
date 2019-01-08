@@ -44,4 +44,8 @@ impl DOM for WebIDLDOM {
     fn create_node(&self, _tag: &str) -> Box<Element> {
         panic!("not implemented");
     }
+
+    fn next_sibling(&self, _el: &Box<Element>) -> Option<&Box<Element>> {
+        panic!("not implemented");
+    }
 }
