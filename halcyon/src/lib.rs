@@ -120,6 +120,7 @@ where
 
     pub fn patch(&mut self, mut new_vnode: VirtualNode<E>) {
         if let None = self.current_vnode {
+            println!("nothing exists {:?}", new_vnode);
             self.current_vnode = Some(new_vnode);
             return;
         }
@@ -129,7 +130,6 @@ where
         for e in self.extensions.iter() {
             e.pre();
         }
-
         if let Some(old_node) = &self.current_vnode {
             if old_node.same(&new_vnode) {
                 // If nodes look like they are the same
@@ -146,7 +146,7 @@ where
                     .get_element()
                     .expect("this should have element because it was put up on screen");
                 let old_next_sibling = old_element.next_sibling();
-                parent_element.insert_before(new_element,old_next_sibling.as_ref());
+                parent_element.insert_before(new_element, old_next_sibling.as_ref());
             }
         }
 

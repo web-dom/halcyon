@@ -2,7 +2,7 @@ use halcyon::{Element, DOM};
 use rctree::Node;
 
 #[derive(Debug)]
-struct NodeData {
+pub struct NodeData {
     tag: String,
     inner_text: Option<String>,
 }
@@ -60,7 +60,7 @@ impl DOM<MemoryElement> for MemoryDOM {
 
 #[derive(Debug, PartialEq)]
 pub struct MemoryElement {
-    node: Node<NodeData>,
+    pub node: Node<NodeData>,
 }
 
 impl Element for MemoryElement {
@@ -77,16 +77,15 @@ impl Element for MemoryElement {
 
     fn next_sibling(&self) -> Option<MemoryElement> {
         match self.node.next_sibling() {
-            Some(s) => Some(MemoryElement{node:s}),
-            None => None
+            Some(s) => Some(MemoryElement { node: s }),
+            None => None,
         }
     }
 
-    fn insert_before(&mut self, element_to_insert:&MemoryElement, target:Option<&MemoryElement>) {
+    fn insert_before(&mut self, element_to_insert: &MemoryElement, target: Option<&MemoryElement>) {
         match target.as_ref() {
             Some(t) => t.node.clone().insert_before(element_to_insert.node.clone()),
-            None => self.node.append(element_to_insert.node.clone())
+            None => self.node.append(element_to_insert.node.clone()),
         }
-
     }
 }

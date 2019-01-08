@@ -74,7 +74,7 @@ where
 {
     pub fn from_element(e: E) -> VirtualNode<E> {
         VirtualNode::Element(VirtualNodeElement {
-            selector: String::from("div"),
+            selector: e.get_tag(),
             data: None,
             children: None,
             element: Some(e),

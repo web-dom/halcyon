@@ -28,7 +28,11 @@ impl Element for WebIDLElement {
         panic!("not implemented")
     }
 
-    fn insert_before(&mut self, _element_to_insert:&WebIDLElement,_target:Option<&WebIDLElement>) {
+    fn insert_before(
+        &mut self,
+        _element_to_insert: &WebIDLElement,
+        _target: Option<&WebIDLElement>,
+    ) {
         panic!("not implemented")
     }
 }
