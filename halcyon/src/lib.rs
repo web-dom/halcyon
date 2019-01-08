@@ -109,8 +109,13 @@ where
                 let children = el.children.as_mut().unwrap();
                 for i in 0..children.len() {
                     self.create_element(&mut children[i]);
-                    let created_element = children[i].get_element().expect("should have element we just created");
-                    let parent_element = el.element.as_mut().expect("parent should have element here");
+                    let created_element = children[i]
+                        .get_element()
+                        .expect("should have element we just created");
+                    let parent_element = el
+                        .element
+                        .as_mut()
+                        .expect("parent should have element here");
                     parent_element.append_child(created_element);
                 }
             }
@@ -163,7 +168,9 @@ where
         if let Some(old_vnode) = self.current_vnode.as_mut() {
             if !old_vnode.same(&new_vnode) {
                 // if they were not the same
-                let e:&mut E = old_vnode.get_element_mut().expect("if its old it should have element");
+                let e: &mut E = old_vnode
+                    .get_element_mut()
+                    .expect("if its old it should have element");
                 e.remove();
                 self.current_vnode = Some(new_vnode);
             }

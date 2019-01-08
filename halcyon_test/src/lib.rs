@@ -22,9 +22,12 @@ mod tests {
             _ => panic!("should not be none"),
         };
         let html_element = &halcyon.dom().root;
-        assert_eq!("html",html_element.borrow().tag);
-        assert_eq!("div",html_element.first_child().unwrap().borrow().tag);
-        assert_eq!(true,html_element.first_child().unwrap().first_child().is_none());
+        assert_eq!("html", html_element.borrow().tag);
+        assert_eq!("div", html_element.first_child().unwrap().borrow().tag);
+        assert_eq!(
+            true,
+            html_element.first_child().unwrap().first_child().is_none()
+        );
     }
 
     #[test]
@@ -43,10 +46,43 @@ mod tests {
             _ => panic!("should not be none"),
         };
         let html_element = &halcyon.dom().root;
-        assert_eq!("html",html_element.borrow().tag);
-        assert_eq!("div",html_element.first_child().unwrap().borrow().tag);
-        assert_eq!("h1",html_element.first_child().unwrap().first_child().unwrap().borrow().tag);
-        assert_eq!("!text",html_element.first_child().unwrap().first_child().unwrap().first_child().unwrap().borrow().tag);
-        assert_eq!("hello world!",html_element.first_child().unwrap().first_child().unwrap().first_child().unwrap().borrow().inner_text.as_ref().unwrap());
+        assert_eq!("html", html_element.borrow().tag);
+        assert_eq!("div", html_element.first_child().unwrap().borrow().tag);
+        assert_eq!(
+            "h1",
+            html_element
+                .first_child()
+                .unwrap()
+                .first_child()
+                .unwrap()
+                .borrow()
+                .tag
+        );
+        assert_eq!(
+            "!text",
+            html_element
+                .first_child()
+                .unwrap()
+                .first_child()
+                .unwrap()
+                .first_child()
+                .unwrap()
+                .borrow()
+                .tag
+        );
+        assert_eq!(
+            "hello world!",
+            html_element
+                .first_child()
+                .unwrap()
+                .first_child()
+                .unwrap()
+                .first_child()
+                .unwrap()
+                .borrow()
+                .inner_text
+                .as_ref()
+                .unwrap()
+        );
     }
 }

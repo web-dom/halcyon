@@ -60,7 +60,7 @@ impl Element {
 
         TokenStream::from_str(&format!(
             r#"halcyon::h("{}", {}, {})"#,
-            self.tag,attributes_token_stream, children_token_stream
+            self.tag, attributes_token_stream, children_token_stream
         ))
         .expect("invalid token stream")
     }

@@ -9,16 +9,14 @@ impl<E> Extension<E> for Attributes
 where
     E: Element,
 {
-    fn pre(&self) {
-    }
+    fn pre(&self) {}
     fn create(&self, old_vnode: &VirtualNode<E>, new_vnode: &VirtualNode<E>) {
         update_attributes(old_vnode, new_vnode);
     }
     fn update(&self, old_vnode: &VirtualNode<E>, new_vnode: &VirtualNode<E>) {
         update_attributes(old_vnode, new_vnode);
     }
-    fn post(&self) {
-    }
+    fn post(&self) {}
 }
 
 impl Attributes {
