@@ -102,7 +102,7 @@ where
     pub fn create_element(&self, vnode: &mut VirtualNode<E>) {
         // if its a normal element
         if let VirtualNode::Element(el) = &vnode {
-            vnode.set_element(self.api.create_node(&el.selector));
+            vnode.set_element(self.api.create_node(&el.tag));
         }
         // then also create all its children
         if let VirtualNode::Element(el) = vnode {

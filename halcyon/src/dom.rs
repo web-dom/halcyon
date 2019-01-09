@@ -13,7 +13,7 @@ pub trait DOM<E>: Debug
 where
     E: Element,
 {
-    fn query_selector(&self, selector: &str) -> Option<E>;
+    fn query_selector(&self, tag: &str) -> Option<E>;
     fn create_node(&self, tag: &str) -> E;
     fn create_text_node(&self, txt: &str) -> E;
 }

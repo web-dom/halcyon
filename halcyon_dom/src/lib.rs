@@ -70,10 +70,10 @@ impl Element for WebIDLElement {
 }
 
 impl DOM<WebIDLElement> for WebIDLDOM {
-    fn query_selector(&self, selector: &str) -> Option<WebIDLElement> {
+    fn query_selector(&self, tag: &str) -> Option<WebIDLElement> {
         let el = self
             .document
-            .query_selector(selector)
+            .query_selector(tag)
             .expect("could not query selected element")
             .expect("did not find selected element");
         Some(WebIDLElement {

@@ -17,7 +17,7 @@ mod tests {
         let root = halcyon.root().expect("there should be a root element");
         match &root {
             VirtualNode::Element(r) => {
-                assert_eq!("div", r.selector, "selector should be div: {:?}", r);
+                assert_eq!("div", r.tag, "tag should be div: {:?}", r);
             }
             _ => panic!("should not be none"),
         };
@@ -41,7 +41,7 @@ mod tests {
         let root = halcyon.root().expect("there should be a root element");
         match &root {
             VirtualNode::Element(r) => {
-                assert_eq!("div", r.selector, "selector should be div: {:?}", r);
+                assert_eq!("div", r.tag, "tag should be div: {:?}", r);
             }
             _ => panic!("should not be none"),
         };
@@ -97,7 +97,7 @@ mod tests {
         let root = halcyon.root().expect("there should be a root element");
         match &root {
             VirtualNode::Element(r) => {
-                assert_eq!("div", r.selector, "selector should be div: {:?}", r);
+                assert_eq!("div", r.tag, "tag should be div: {:?}", r);
             }
             _ => panic!("should not be none"),
         };
@@ -127,7 +127,7 @@ mod tests {
         let root = halcyon.root().expect("there should be a root element");
         match &root {
             VirtualNode::Element(r) => {
-                assert_eq!("div", r.selector, "selector should be div: {:?}", r);
+                assert_eq!("div", r.tag, "tag should be div: {:?}", r);
             }
             _ => panic!("should not be none"),
         };

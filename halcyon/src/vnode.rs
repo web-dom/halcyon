@@ -14,7 +14,7 @@ where
     pub fn same(&self, other: &VirtualNode<E>) -> bool {
         match self {
             VirtualNode::Element(e) => match other {
-                VirtualNode::Element(oe) => e.list_key == oe.list_key && e.selector == oe.selector,
+                VirtualNode::Element(oe) => e.list_key == oe.list_key && e.tag == oe.tag,
                 _ => false,
             },
             VirtualNode::Text(e) => match other {
@@ -87,7 +87,7 @@ where
 {
     pub fn from_element(e: E) -> VirtualNode<E> {
         VirtualNode::Element(VirtualNodeElement {
-            selector: e.get_tag(),
+            tag: e.get_tag(),
             data: None,
             children: None,
             element: Some(e),
@@ -98,7 +98,7 @@ where
 
 #[derive(Debug)]
 pub struct VirtualNodeElement<E: Element> {
-    pub selector: String,
+    pub tag: String,
     pub data: Option<Props>,
     pub children: Option<Vec<VirtualNode<E>>>,
     pub element: Option<E>,
@@ -110,7 +110,7 @@ where
     E: Element,
 {
     fn eq(&self, other: &VirtualNodeElement<E>) -> bool {
-        self.selector == other.selector
+        self.tag == other.tag
             && self.data == other.data
             && self.list_key == other.list_key
             && self.children == other.children

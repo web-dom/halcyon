@@ -31,8 +31,8 @@ impl MemoryDOM {
 }
 
 impl DOM<MemoryElement> for MemoryDOM {
-    fn query_selector(&self, selector: &str) -> Option<MemoryElement> {
-        if selector == "body" {
+    fn query_selector(&self, tag: &str) -> Option<MemoryElement> {
+        if tag == "body" {
             return match self.root.first_child() {
                 Some(fc) => Some(MemoryElement { node: fc }),
                 None => None,

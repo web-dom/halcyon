@@ -21,7 +21,7 @@ where
 }
 
 pub fn h<E>(
-    selector: &str,
+    tag: &str,
     data: Option<Props>,
     children: Option<Vec<VirtualNode<E>>>,
 ) -> VirtualNode<E>
@@ -29,7 +29,7 @@ where
     E: Element,
 {
     VirtualNode::Element(VirtualNodeElement {
-        selector: String::from(selector),
+        tag: String::from(tag),
         data: data,
         children: children,
         element: None,

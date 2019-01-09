@@ -71,7 +71,7 @@ pub fn run() -> Result<(), JsValue> {
         static HALCYON:RefCell<Halcyon<WebIDLDOM,WebIDLElement>> = RefCell::new(Halcyon::<WebIDLDOM,WebIDLElement>::new(WebIDLDOM::new()));
     };
     // Setup Halcyon:
-    // 1. runs initial render to target query selector Element
+    // 1. runs initial render to target Element
     // 2. listening to the store for new state and rerenders
     // This uses a closure that calls the component's rendering function
     Halcyon::setup(&HALCYON, &STORE, "body", || html! {<Counter/>});
