@@ -72,14 +72,14 @@ impl Element for WebIDLElement {
 
 impl DOM<WebIDLElement> for WebIDLDOM {
     fn query_selector(&self, selector: &str) -> Option<WebIDLElement> {
+        let el = self
+            .document
+            .query_selector(selector)
+            .expect("could not query selected element")
+            .expect("did not find selected element");
         Some(WebIDLElement {
-            tag: selector.to_string(),
-            el: self
-                .document
-                .query_selector(selector)
-                .expect("could not query selected element")
-                .expect("did not find selected element")
-                .into(),
+            tag: el.tag_name(),
+            el: el.into()
         })
     }
 

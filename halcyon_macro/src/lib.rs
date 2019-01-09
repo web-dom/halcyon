@@ -12,6 +12,18 @@ struct Element {
     attributes: Vec<Attribute>,
 }
 
+fn to_snake(t:&str) -> String {
+    let mut s = String::new();
+    for (i,c) in t.chars().enumerate() {
+        let new_char = c;
+        if i > 0 && c.is_uppercase() {
+            s.push_str(&"_");
+        }
+        s.push_str(&new_char.to_lowercase().to_string());
+    }
+    s
+}
+
 impl Element {
     fn to_token_stream(&self) -> TokenStream {
         let mut children_token_stream = String::from("None");
@@ -58,11 +70,20 @@ impl Element {
             ));
         }
 
-        TokenStream::from_str(&format!(
-            r#"halcyon::h("{}", {}, {})"#,
-            self.tag, attributes_token_stream, children_token_stream
-        ))
-        .expect("invalid token stream")
+        let c = self.tag.chars().next().unwrap();
+        if c.is_uppercase() {
+            TokenStream::from_str(&format!(
+                r#"halcyon::c(halcyon::C::from({}), {}, {})"#,
+                to_snake(&self.tag), attributes_token_stream, children_token_stream
+            ))
+            .expect("invalid token stream")
+        } else {
+            TokenStream::from_str(&format!(
+                r#"halcyon::h("{}", {}, {})"#,
+                self.tag, attributes_token_stream, children_token_stream
+            ))
+            .expect("invalid token stream")
+        }
     }
 }
 
