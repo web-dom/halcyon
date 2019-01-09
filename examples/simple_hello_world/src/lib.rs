@@ -9,10 +9,7 @@ use halcyon_macro::html;
 use wasm_bindgen::prelude::*;
 
 // Create a simple functional component
-fn hello_world(
-    _props: Props,
-    _children: Vec<VirtualNode<WebIDLElement>>,
-) -> VirtualNode<WebIDLElement> {
+fn hello_world(_: Props, _: Vec<VirtualNode<WebIDLElement>>) -> VirtualNode<WebIDLElement> {
     html! {
         <div>{"Hello World!"}</div>
     }

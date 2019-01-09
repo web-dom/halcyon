@@ -42,10 +42,7 @@ impl Reducer<Actions> for Rc<Counter> {
 thread_local! { static STORE : RefCell<Store<Rc<Counter>, Actions>> = RefCell::new(Store::new(Rc::new(Counter{count:0}))); }
 
 // Our counter component
-fn counter(
-    _props: Props,
-    _children: Vec<VirtualNode<WebIDLElement>>,
-) -> VirtualNode<WebIDLElement> {
+fn counter(_: Props, _: Vec<VirtualNode<WebIDLElement>>) -> VirtualNode<WebIDLElement> {
     Store::connect(&STORE, |state, dispatch| {
         let dispatcher_increment = dispatch.clone();
         let dispatcher_decrement = dispatch.clone();
