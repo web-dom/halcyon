@@ -43,8 +43,8 @@ thread_local! { static STORE : RefCell<Store<Rc<Counter>, Actions>> = RefCell::n
 
 // Our counter component
 fn counter(
-    _props: Option<Props>,
-    _children: Option<Vec<VirtualNode<WebIDLElement>>>,
+    _props: Props,
+    _children: Vec<VirtualNode<WebIDLElement>>,
 ) -> VirtualNode<WebIDLElement> {
     Store::connect(&STORE, |state, dispatch| {
         let dispatcher_increment = dispatch.clone();

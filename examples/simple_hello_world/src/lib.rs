@@ -11,8 +11,8 @@ use wasm_bindgen::prelude::*;
 
 // Create a simple functional component
 fn hello_world(
-    _props: Option<Props>,
-    _children: Option<Vec<VirtualNode<WebIDLElement>>>,
+    _props: Props,
+    _children: Vec<VirtualNode<WebIDLElement>>,
 ) -> VirtualNode<WebIDLElement> {
     html! {
         <div>{"Hello World!"}</div>
