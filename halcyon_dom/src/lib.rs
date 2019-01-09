@@ -2,67 +2,97 @@ use halcyon::{Element, DOM};
 
 #[derive(Debug)]
 #[allow(dead_code)]
-pub struct WebIDLDOM {}
+pub struct WebIDLDOM {
+    document: web_sys::Document,
+}
 
 impl WebIDLDOM {
     pub fn new() -> WebIDLDOM {
-        WebIDLDOM {}
+        let window = web_sys::window().unwrap();
+        let document = window.document().unwrap();
+        WebIDLDOM { document: document }
     }
 }
 
 #[derive(Debug)]
 pub struct WebIDLElement {
-    el: web_sys::Element,
+    tag: String,
+    el: web_sys::Node,
 }
 
 impl Element for WebIDLElement {
     fn get_tag(&self) -> String {
-        self.el.tag_name().clone()
+        self.tag.clone()
     }
 
     fn get_parent(&self) -> Option<WebIDLElement> {
-        panic!("todo")
+        let n = self.el.parent_element().expect("should have parent");
+        Some(WebIDLElement {
+            tag: n.tag_name(),
+            el: n.into(),
+        })
     }
 
     fn next_sibling(&self) -> Option<WebIDLElement> {
-        panic!("not implemented")
+        let n = self.el.next_sibling().expect("should have parent");
+        Some(WebIDLElement {
+            tag: "not-sure-what-next-sibling-should-be".to_string(),
+            el: n.into(),
+        })
     }
 
-    fn insert_before(
-        &mut self,
-        _element_to_insert: &WebIDLElement,
-        _target: Option<&mut WebIDLElement>,
-    ) {
-        panic!("not implemented")
+    fn insert_before(&mut self, element: &WebIDLElement, target: Option<&mut WebIDLElement>) {
+        match target {
+            Some(n) => self.el.insert_before(&element.el, Some(&n.el)),
+            None => self.el.insert_before(&element.el, None),
+        }
+        .expect("should have inserted");
     }
 
     fn remove(&mut self) {
-        panic!("not implemented");
+        self.el
+            .parent_node()
+            .expect("should have parent")
+            .remove_child(&self.el)
+            .expect("should have removed");
     }
 
-    fn append_child(&mut self, _element: &WebIDLElement) {
-        panic("not implemented")
+    fn append_child(&mut self, element: &WebIDLElement) {
+        self.el
+            .append_child(&element.el)
+            .expect("should have appended");
     }
 }
 
 impl DOM<WebIDLElement> for WebIDLDOM {
     fn query_selector(&self, selector: &str) -> Option<WebIDLElement> {
-        let window = web_sys::window().unwrap();
-        let document = window.document().unwrap();
         Some(WebIDLElement {
-            el: document
+            tag: selector.to_string(),
+            el: self
+                .document
                 .query_selector(selector)
                 .expect("could not query selected element")
-                .expect("did not find selected element"),
+                .expect("did not find selected element")
+                .into(),
         })
     }
 
-    fn create_text_node(&self, _txt: &str) -> WebIDLElement {
-        panic!("not implemented");
+    fn create_text_node(&self, txt: &str) -> WebIDLElement {
+        WebIDLElement {
+            tag: "!text".to_string(),
+            el: self.document.create_text_node(txt).into(),
+        }
     }
 
-    fn create_node(&self, _tag: &str) -> WebIDLElement {
-        panic!("not implemented");
+    fn create_node(&self, tag: &str) -> WebIDLElement {
+        WebIDLElement {
+            tag: tag.to_string(),
+            el: self
+                .document
+                .create_element(tag)
+                .expect("should be able to create element")
+                .into(),
+        }
     }
 }
 
