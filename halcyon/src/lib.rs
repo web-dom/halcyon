@@ -12,7 +12,7 @@ mod store;
 mod vnode;
 
 pub use crate::extensions::attributes::Attributes;
-pub use crate::helpers::{h, t, c, C};
+pub use crate::helpers::{c, h, t};
 pub use crate::props::{Prop, Props};
 pub use crate::store::{Reducer, Store};
 pub use crate::vnode::{VirtualNode, VirtualNodeElement, VirtualNodeText};

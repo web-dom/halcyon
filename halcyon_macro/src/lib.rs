@@ -12,9 +12,9 @@ struct Element {
     attributes: Vec<Attribute>,
 }
 
-fn to_snake(t:&str) -> String {
+fn to_snake(t: &str) -> String {
     let mut s = String::new();
-    for (i,c) in t.chars().enumerate() {
+    for (i, c) in t.chars().enumerate() {
         let new_char = c;
         if i > 0 && c.is_uppercase() {
             s.push_str(&"_");
@@ -73,8 +73,10 @@ impl Element {
         let c = self.tag.chars().next().unwrap();
         if c.is_uppercase() {
             TokenStream::from_str(&format!(
-                r#"halcyon::c(halcyon::C::from({}), {}, {})"#,
-                to_snake(&self.tag), attributes_token_stream, children_token_stream
+                r#"halcyon::c(Box::new({}), {}, {})"#,
+                to_snake(&self.tag),
+                attributes_token_stream,
+                children_token_stream
             ))
             .expect("invalid token stream")
         } else {

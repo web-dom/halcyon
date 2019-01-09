@@ -1,7 +1,7 @@
 #![feature(proc_macro_hygiene)]
 // Basics we need for halcyon
 use halcyon::DOM;
-use halcyon::{Halcyon, VirtualNode};
+use halcyon::{Halcyon, Props, VirtualNode};
 // A DOM interface using WebIDL
 use halcyon_dom::{WebIDLDOM, WebIDLElement};
 // A standard helper macro for creating virtual dom for halcyon
@@ -10,7 +10,10 @@ use halcyon_macro::html;
 use wasm_bindgen::prelude::*;
 
 // Create a simple functional component
-fn hello_world() -> VirtualNode<WebIDLElement> {
+fn hello_world(
+    _props: Option<Props>,
+    _children: Option<Vec<VirtualNode<WebIDLElement>>>,
+) -> VirtualNode<WebIDLElement> {
     html! {
         <div>{"Hello World!"}</div>
     }
@@ -30,6 +33,6 @@ pub fn run() -> Result<(), JsValue> {
         .expect("body should exist");
 
     // Renders out the initial component's virtual dom to the body
-    halcyon.init_render(body, html!{<HelloWorld></HelloWorld>});
+    halcyon.init_render(body, html! {<HelloWorld></HelloWorld>});
     Ok(())
 }

@@ -36,15 +36,12 @@ impl Element for WebIDLElement {
     fn next_sibling(&self) -> Option<WebIDLElement> {
         let s = self.el.next_sibling();
         match s {
-            Some(n) => {
-                Some(WebIDLElement {
-                    tag: "not-sure-what-next-sibling-should-be".to_string(),
-                    el: n.into(),
-                })
-            },
-            None => None
+            Some(n) => Some(WebIDLElement {
+                tag: "not-sure-what-next-sibling-should-be".to_string(),
+                el: n.into(),
+            }),
+            None => None,
         }
-
     }
 
     fn insert_before(&mut self, element: &WebIDLElement, target: Option<&mut WebIDLElement>) {
@@ -79,7 +76,7 @@ impl DOM<WebIDLElement> for WebIDLDOM {
             .expect("did not find selected element");
         Some(WebIDLElement {
             tag: el.tag_name(),
-            el: el.into()
+            el: el.into(),
         })
     }
 
