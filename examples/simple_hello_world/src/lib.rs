@@ -1,9 +1,8 @@
 #![feature(proc_macro_hygiene)]
 // Basics we need for halcyon
-use halcyon::DOM;
-use halcyon::{Halcyon, Props, VirtualNode};
+use halcyon::prelude::*;
 // A DOM interface using WebIDL
-use halcyon_dom::{WebIDLDOM, WebIDLElement};
+use halcyon_dom::prelude::*;
 // A standard helper macro for creating virtual dom for halcyon
 use halcyon_macro::html;
 // wasm_bindgen helps us talk to the browser in a standard way

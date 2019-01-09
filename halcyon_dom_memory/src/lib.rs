@@ -1,6 +1,8 @@
 use halcyon::{Element, DOM};
 use rctree::Node;
 
+pub mod prelude;
+
 #[derive(Debug)]
 pub struct NodeData {
     pub tag: String,

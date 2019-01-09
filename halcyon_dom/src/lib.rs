@@ -1,5 +1,7 @@
 use halcyon::{Element, DOM};
 
+pub mod prelude;
+
 #[derive(Debug)]
 #[allow(dead_code)]
 pub struct WebIDLDOM {

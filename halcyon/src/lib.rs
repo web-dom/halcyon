@@ -7,6 +7,7 @@ use std::thread::LocalKey;
 mod dom;
 mod extensions;
 mod helpers;
+pub mod prelude;
 mod props;
 mod store;
 mod vnode;
