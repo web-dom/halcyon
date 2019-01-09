@@ -33,6 +33,6 @@ pub fn run() -> Result<(), JsValue> {
         .expect("body should exist");
 
     // Renders out the initial component's virtual dom to the body
-    halcyon.init_render(body, html! {<HelloWorld></HelloWorld>});
+    halcyon.init_render(body, html! {<HelloWorld/>});
     Ok(())
 }
