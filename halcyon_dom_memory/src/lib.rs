@@ -1,5 +1,6 @@
 use halcyon::{Element, DOM};
 use rctree::Node;
+use std::collections::HashMap;
 
 pub mod prelude;
 
@@ -7,6 +8,7 @@ pub mod prelude;
 pub struct NodeData {
     pub tag: String,
     pub inner_text: Option<String>,
+    pub attributes: HashMap<String, String>,
 }
 
 #[derive(Debug)]
@@ -20,11 +22,13 @@ impl MemoryDOM {
             root: Node::new(NodeData {
                 tag: "html".to_string(),
                 inner_text: None,
+                attributes: HashMap::new(),
             }),
         };
         md.root.append(Node::new(NodeData {
             tag: "body".to_string(),
             inner_text: None,
+            attributes: HashMap::new(),
         }));
         md
     }
@@ -46,6 +50,7 @@ impl DOM<MemoryElement> for MemoryDOM {
             node: Node::new(NodeData {
                 tag: "!text".to_string(),
                 inner_text: Some(txt.to_string()),
+                attributes: HashMap::new(),
             }),
         }
     }
@@ -55,6 +60,7 @@ impl DOM<MemoryElement> for MemoryDOM {
             node: Node::new(NodeData {
                 tag: tag.to_string(),
                 inner_text: None,
+                attributes: HashMap::new(),
             }),
         }
     }
@@ -101,5 +107,12 @@ impl Element for MemoryElement {
 
     fn append_child(&mut self, element: &MemoryElement) {
         self.node.append(element.node.clone());
+    }
+
+    fn set_attribute(&mut self, name: &str, value: &str) {
+        self.node
+            .borrow_mut()
+            .attributes
+            .insert(name.to_string(), value.to_string());
     }
 }

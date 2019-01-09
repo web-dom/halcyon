@@ -1,5 +1,5 @@
 use crate::dom::Element;
-use crate::VirtualNode;
+use crate::VirtualNodeElement;
 use std::fmt::Debug;
 
 /*
@@ -20,14 +20,19 @@ where
     E: Element,
 {
     fn pre(&self) {}
-    fn init(&self, _vnode: &VirtualNode<E>) {}
-    fn create(&self, _empty_vnode: &VirtualNode<E>, _new_vnode: &VirtualNode<E>) {}
-    fn insert(&self, _vnode: &VirtualNode<E>) {}
-    fn pre_patch(&self, _old_vnode: &VirtualNode<E>, _new_vnode: &VirtualNode<E>) {}
-    fn update(&self, _old_vnode: &VirtualNode<E>, _new_vnode: &VirtualNode<E>) {}
-    fn handle(&self, _old_vnode: &VirtualNode<E>, _new_vnode: &VirtualNode<E>) {}
-    fn destroy(&self, _vnode: &VirtualNode<E>) {}
-    fn remove(&self, _vnode: &VirtualNode<E>) {}
+    fn init(&self, _vnode: &VirtualNodeElement<E>) {}
+    fn create(&self, _new_vnode: &mut VirtualNodeElement<E>) {}
+    fn insert(&self, _vnode: &VirtualNodeElement<E>) {}
+    fn pre_patch(&self, _old_vnode: &VirtualNodeElement<E>, _new_vnode: &VirtualNodeElement<E>) {}
+    fn update(
+        &self,
+        _old_vnode: &mut VirtualNodeElement<E>,
+        _new_vnode: &mut VirtualNodeElement<E>,
+    ) {
+    }
+    fn handle(&self, _old_vnode: &VirtualNodeElement<E>, _new_vnode: &VirtualNodeElement<E>) {}
+    fn destroy(&self, _vnode: &VirtualNodeElement<E>) {}
+    fn remove(&self, _vnode: &VirtualNodeElement<E>) {}
     fn post(&self) {}
 }
 

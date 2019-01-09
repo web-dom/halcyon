@@ -20,11 +20,7 @@ where
     function(p, c)
 }
 
-pub fn h<E>(
-    tag: &str,
-    data: Option<Props>,
-    children: Option<Vec<VirtualNode<E>>>,
-) -> VirtualNode<E>
+pub fn h<E>(tag: &str, data: Option<Props>, children: Option<Vec<VirtualNode<E>>>) -> VirtualNode<E>
 where
     E: Element,
 {

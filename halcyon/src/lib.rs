@@ -106,6 +106,9 @@ where
         }
         // then also create all its children
         if let VirtualNode::Element(el) = vnode {
+            for e in self.extensions.iter() {
+                e.create(el)
+            }
             if el.children.is_some() {
                 let children = el.children.as_mut().unwrap();
                 for i in 0..children.len() {

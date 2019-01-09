@@ -7,6 +7,7 @@ pub trait Element: Debug + PartialEq + Sized {
     fn insert_before(&mut self, element: &Self, target: Option<&mut Self>);
     fn remove(&mut self);
     fn append_child(&mut self, element: &Self);
+    fn set_attribute(&mut self, name: &str, value: &str);
 }
 
 pub trait DOM<E>: Debug
