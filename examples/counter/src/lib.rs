@@ -69,6 +69,7 @@ fn counter(
 
 #[wasm_bindgen(start)]
 pub fn run() -> Result<(), JsValue> {
+    // Creates a halcyon instance targeting WebIDL
     thread_local! {
         static HALCYON:RefCell<Halcyon<WebIDLDOM,WebIDLElement>> = RefCell::new(Halcyon::<WebIDLDOM,WebIDLElement>::new(WebIDLDOM::new()));
     };
