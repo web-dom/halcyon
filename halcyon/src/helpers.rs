@@ -11,11 +11,11 @@ where
 {
     let p = match data {
         Some(p) => p,
-        None => Props::new()
+        None => Props::new(),
     };
     let c = match children {
         Some(c) => c,
-        None => vec![]
+        None => vec![],
     };
     function(p, c)
 }
