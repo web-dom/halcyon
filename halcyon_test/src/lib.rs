@@ -85,4 +85,76 @@ mod tests {
                 .unwrap()
         );
     }
+
+    #[test]
+    fn simple_nesting_2() {
+        let mut halcyon = Halcyon::<MemoryDOM, MemoryElement>::new(MemoryDOM::new());
+        let body = halcyon
+            .dom()
+            .query_selector("body")
+            .expect("there should be a body");
+        halcyon.init_render(body, html!(<div><h1></h1></div>));
+        let root = halcyon.root().expect("there should be a root element");
+        match &root {
+            VirtualNode::Element(r) => {
+                assert_eq!("div", r.selector, "selector should be div: {:?}", r);
+            }
+            _ => panic!("should not be none"),
+        };
+        let html_element = &halcyon.dom().root;
+        assert_eq!("html", html_element.borrow().tag);
+        assert_eq!("div", html_element.first_child().unwrap().borrow().tag);
+        assert_eq!(
+            "h1",
+            html_element
+                .first_child()
+                .unwrap()
+                .first_child()
+                .unwrap()
+                .borrow()
+                .tag
+        );
+    }
+
+    #[test]
+    fn simple_nesting_3() {
+        let mut halcyon = Halcyon::<MemoryDOM, MemoryElement>::new(MemoryDOM::new());
+        let body = halcyon
+            .dom()
+            .query_selector("body")
+            .expect("there should be a body");
+        halcyon.init_render(body, html!(<div><h1></h1><h2></h2></div>));
+        let root = halcyon.root().expect("there should be a root element");
+        match &root {
+            VirtualNode::Element(r) => {
+                assert_eq!("div", r.selector, "selector should be div: {:?}", r);
+            }
+            _ => panic!("should not be none"),
+        };
+        let html_element = &halcyon.dom().root;
+        assert_eq!("html", html_element.borrow().tag);
+        assert_eq!("div", html_element.first_child().unwrap().borrow().tag);
+        assert_eq!(
+            "h1",
+            html_element
+                .first_child()
+                .unwrap()
+                .first_child()
+                .unwrap()
+                .borrow()
+                .tag
+        );
+        assert_eq!(
+            "h2",
+            html_element
+                .first_child()
+                .unwrap()
+                .first_child()
+                .unwrap()
+                .next_sibling()
+                .unwrap()
+                .borrow()
+                .tag
+        );
+    }
 }
