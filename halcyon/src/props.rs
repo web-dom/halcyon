@@ -1,6 +1,6 @@
+use std::any::Any;
 use std::collections::HashMap;
 use std::fmt;
-use std::any::Any;
 
 pub type Props = HashMap<String, Prop>;
 

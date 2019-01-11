@@ -70,7 +70,7 @@ where
         }
     }
 
-    pub fn to_string(&self) -> String{
+    pub fn to_string(&self) -> String {
         match self {
             VirtualNode::Element(e) => match e.element.as_ref() {
                 Some(el) => el.to_string(),

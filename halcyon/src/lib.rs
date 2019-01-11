@@ -198,7 +198,7 @@ where
     pub fn render_to_string(&self) -> String {
         match self.current_vnode.as_ref() {
             Some(v) => v.to_string(),
-            None => "".to_string()
+            None => "".to_string(),
         }
     }
 }

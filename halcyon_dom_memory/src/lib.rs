@@ -16,14 +16,23 @@ pub struct MemoryDOM {
     pub root: Node<NodeData>,
 }
 
-fn node_to_string(node:&Node<NodeData>) -> String{
+fn node_to_string(node: &Node<NodeData>) -> String {
     let n = node.borrow();
     match &n.inner_text {
         Some(t) => t.clone(),
         None => {
-            let attributes = n.attributes.iter().map(|(n,v)|format!(r#" {}="{}""#,n,v)).collect::<Vec<String>>().join("");
-            let children = node.children().map(|x|node_to_string(&x)).collect::<Vec<String>>().join("");
-            format!("<{}{}>{}</{}>",n.tag,attributes, children, n.tag)
+            let attributes = n
+                .attributes
+                .iter()
+                .map(|(n, v)| format!(r#" {}="{}""#, n, v))
+                .collect::<Vec<String>>()
+                .join("");
+            let children = node
+                .children()
+                .map(|x| node_to_string(&x))
+                .collect::<Vec<String>>()
+                .join("");
+            format!("<{}{}>{}</{}>", n.tag, attributes, children, n.tag)
         }
     }
 }

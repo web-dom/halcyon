@@ -19,5 +19,5 @@ fn main() {
 
     // Renders out the initial component's virtual dom to the body
     halcyon.init_render(body, html! {<HelloWorld/>});
-    println!("{}",halcyon.render_to_string());
+    println!("{}", halcyon.render_to_string());
 }
