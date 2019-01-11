@@ -16,6 +16,18 @@ pub struct MemoryDOM {
     pub root: Node<NodeData>,
 }
 
+fn node_to_string(node:&Node<NodeData>) -> String{
+    let n = node.borrow();
+    match &n.inner_text {
+        Some(t) => t.clone(),
+        None => {
+            let attributes = n.attributes.iter().map(|(n,v)|format!(r#" {}="{}""#,n,v)).collect::<Vec<String>>().join("");
+            let children = node.children().map(|x|node_to_string(&x)).collect::<Vec<String>>().join("");
+            format!("<{}{}>{}</{}>",n.tag,attributes, children, n.tag)
+        }
+    }
+}
+
 impl MemoryDOM {
     pub fn new() -> MemoryDOM {
         let mut md = MemoryDOM {
@@ -114,5 +126,9 @@ impl Element for MemoryElement {
             .borrow_mut()
             .attributes
             .insert(name.to_string(), value.to_string());
+    }
+
+    fn to_string(&self) -> String {
+        node_to_string(&self.node)
     }
 }

@@ -69,6 +69,19 @@ where
             },
         }
     }
+
+    pub fn to_string(&self) -> String{
+        match self {
+            VirtualNode::Element(e) => match e.element.as_ref() {
+                Some(el) => el.to_string(),
+                None => "".to_string(),
+            },
+            VirtualNode::Text(e) => match e.element.as_ref() {
+                Some(el) => el.to_string(),
+                None => "".to_string(),
+            },
+        }
+    }
 }
 
 impl<T, E> From<T> for VirtualNode<E>

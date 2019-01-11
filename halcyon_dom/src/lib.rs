@@ -104,6 +104,10 @@ impl Element for WebIDLElement {
             NodeHandle::Unknown(_) => (),
         };
     }
+
+    fn to_string(&self) -> String {
+        panic!("not implemented");
+    }
 }
 
 impl DOM<WebIDLElement> for WebIDLDOM {

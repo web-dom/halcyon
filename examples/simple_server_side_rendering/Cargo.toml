@@ -1,0 +1,10 @@
+[package]
+name = "simple_server_side_rendering"
+version = "0.0.1"
+authors = ["Richard Anaya"]
+edition = "2018"
+
+[dependencies]
+halcyon = { path = "../../halcyon" }
+halcyon_macro = {path="../../halcyon_macro"}
+halcyon_dom_memory = {path="../../halcyon_dom_memory"}

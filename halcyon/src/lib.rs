@@ -194,4 +194,11 @@ where
     pub fn render(&mut self, container: VirtualNode<E>) {
         self.patch(container);
     }
+
+    pub fn render_to_string(&self) -> String {
+        match self.current_vnode.as_ref() {
+            Some(v) => v.to_string(),
+            None => "".to_string()
+        }
+    }
 }

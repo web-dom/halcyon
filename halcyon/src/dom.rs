@@ -8,6 +8,7 @@ pub trait Element: Debug + PartialEq + Sized {
     fn remove(&mut self);
     fn append_child(&mut self, element: &Self);
     fn set_attribute(&mut self, name: &str, value: &str);
+    fn to_string(&self) -> String;
 }
 
 pub trait DOM<E>: Debug
