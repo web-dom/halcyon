@@ -11,7 +11,7 @@ use wasm_bindgen::prelude::*;
 // Create a simple functional component
 fn hello_world(_: Props, _: Vec<VirtualNode<WebIDLElement>>) -> VirtualNode<WebIDLElement> {
     html! {
-        <div>{"Hello World!"}</div>
+        <div id="helloworld">{"Hello World!"}</div>
     }
 }
 
@@ -25,7 +25,7 @@ pub fn run() -> Result<(), JsValue> {
     // Gets a handle to the body
     let body = halcyon
         .dom()
-        .query_selector("body")
+        .query_selector("#helloworld")
         .expect("body should exist");
 
     // Renders out the initial component's virtual dom to the body
