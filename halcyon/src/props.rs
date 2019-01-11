@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 use std::fmt;
+use std::any::Any;
 
 pub type Props = HashMap<String, Prop>;
 
@@ -9,6 +10,7 @@ pub enum Prop {
     String(String),
     Bool(bool),
     Fn00(Box<Fn()>),
+    Any(Box<Any>),
 }
 
 impl fmt::Debug for Prop {
@@ -19,6 +21,7 @@ impl fmt::Debug for Prop {
             Prop::NumberI32(v) => write!(f, "{}", format!("{:?}", v)),
             Prop::String(v) => write!(f, "{}", format!("{:?}", v)),
             Prop::Bool(v) => write!(f, "{}", format!("{:?}", v)),
+            Prop::Any(v) => write!(f, "{}", format!("{:?}", v)),
         }
     }
 }
@@ -56,6 +59,12 @@ impl From<Props> for Prop {
 impl From<bool> for Prop {
     fn from(v: bool) -> Prop {
         Prop::Bool(v)
+    }
+}
+
+impl From<Box<Any>> for Prop {
+    fn from(v: Box<Any>) -> Prop {
+        Prop::Any(v)
     }
 }
 
