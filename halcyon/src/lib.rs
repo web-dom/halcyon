@@ -3,6 +3,7 @@ use crate::extensions::Extension;
 use std::cell::RefCell;
 use std::rc::Rc;
 use std::thread::LocalKey;
+use std::mem::swap;
 
 mod dom;
 mod extensions;
@@ -23,7 +24,6 @@ pub struct Halcyon<D: DOM<E>, E: Element> {
     api: D,
     current_vnode: Option<VirtualNode<E>>,
     extensions: Vec<Box<Extension<E>>>,
-    inserted_vnodes: Vec<VirtualNode<E>>,
 }
 
 impl<D, E> Halcyon<D, E>
@@ -78,7 +78,6 @@ where
             api: api,
             current_vnode: None,
             extensions: vec![Box::new(Attributes::new())],
-            inserted_vnodes: vec![],
         }
     }
 
@@ -91,7 +90,6 @@ where
             api: api,
             current_vnode: None,
             extensions: extensions,
-            inserted_vnodes: vec![],
         }
     }
 
@@ -139,21 +137,33 @@ where
         }
     }*/
 
+    pub fn patch_vnode(&self,old_vnode: &mut VirtualNode<E>,new_vnode: &mut VirtualNode<E>){
+
+    }
+
     pub fn patch(&mut self, mut new_vnode: VirtualNode<E>) {
-        if let None = self.current_vnode {
+        let mut old_vnode = None;
+        swap(&mut old_vnode,&mut self.current_vnode);
+
+        if let None = old_vnode {
             self.current_vnode = Some(new_vnode);
             return;
         }
-        self.inserted_vnodes.clear();
 
         // Tell all extensions we are about to patch
         for e in self.extensions.iter() {
             e.pre();
         }
-        if let Some(old_vnode) = self.current_vnode.as_ref() {
+
+        if let Some(old_vnode) = old_vnode.as_mut() {
             if old_vnode.same(&new_vnode) {
                 // If nodes look like they are the same
-            } else {
+                self.patch_vnode(old_vnode, &mut new_vnode);
+            }
+        }
+
+        if let Some(old_vnode) = old_vnode.as_ref() {
+            if !old_vnode.same(&new_vnode) {
                 // If nodes look like they are completely different
                 let mut parent_element = old_vnode
                     .get_parent_element()
@@ -169,7 +179,7 @@ where
                 parent_element.insert_before(new_element, old_next_sibling.as_mut());
             }
         }
-        if let Some(old_vnode) = self.current_vnode.as_mut() {
+        if let Some(old_vnode) = old_vnode.as_mut() {
             if !old_vnode.same(&new_vnode) {
                 // if they were not the same
                 let e: &mut E = old_vnode
