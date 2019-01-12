@@ -138,7 +138,21 @@ where
     }*/
 
     pub fn patch_vnode(&self,old_vnode: &mut VirtualNode<E>,new_vnode: &mut VirtualNode<E>){
-
+        match new_vnode {
+            VirtualNode::Element(ne) => match old_vnode {
+                VirtualNode::Element(oe) => {
+                    swap(&mut ne.element, &mut oe.element);
+                    for e in self.extensions.iter() {
+                        e.update(oe,ne);
+                    }
+                },
+                VirtualNode::Text(oe) => swap(&mut ne.element, &mut oe.element),
+            },
+            VirtualNode::Text(ne) =>  match old_vnode {
+                VirtualNode::Element(oe) => swap(&mut ne.element, &mut oe.element),
+                VirtualNode::Text(oe) => swap(&mut ne.element, &mut oe.element),
+            },
+        };
     }
 
     pub fn patch(&mut self, mut new_vnode: VirtualNode<E>) {
