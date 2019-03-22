@@ -20,3 +20,15 @@ pub fn main() -> () {
 <script src="http://unpkg.com/web-dom@latest/web-dom.min.js"></script>
 <web-dom module="helloworld.wasm"></web-dom>
 ```
+
+fn main() {
+    let mut halcyon = Halcyon::<MemoryDOM, MemoryElement>::new(MemoryDOM::new());
+    let body = halcyon
+        .dom()
+        .query_selector("body")
+        .expect("body should exist");
+
+    // Renders out the initial component's virtual dom to the body
+    halcyon.render(body, html! {<HelloWorld/>});
+    println!("{}", halcyon.render_to_string());
+}
