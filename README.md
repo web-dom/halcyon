@@ -15,3 +15,8 @@ pub fn main() -> () {
     halcyon.render(root, html! {<HelloWorld/>});
 }
 ```
+```html
+<div id="helloworld"></div>
+<script src="http://unpkg.com/web-dom@latest/web-dom.min.js"></script>
+<web-dom module="helloworld.wasm"></web-dom>
+```
