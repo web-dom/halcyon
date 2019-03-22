@@ -21,6 +21,7 @@ pub fn main() -> () {
 <web-dom module="helloworld.wasm"></web-dom>
 ```
 
+```rust
 fn main() {
     let mut halcyon = Halcyon::<MemoryDOM, MemoryElement>::new(MemoryDOM::new());
     let body = halcyon
@@ -32,3 +33,4 @@ fn main() {
     halcyon.render(body, html! {<HelloWorld/>});
     println!("{}", halcyon.render_to_string());
 }
+```
