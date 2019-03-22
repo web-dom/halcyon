@@ -24,12 +24,7 @@ pub fn main() -> () {
 ```rust
 fn main() {
     let mut halcyon = Halcyon::<MemoryDOM, MemoryElement>::new(MemoryDOM::new());
-    let body = halcyon
-        .dom()
-        .query_selector("body")
-        .expect("body should exist");
-
-    // Renders out the initial component's virtual dom to the body
+    let root = halcyon.dom().query_selector("#helloworld").unwrap();
     halcyon.render(body, html! {<HelloWorld/>});
     println!("{}", halcyon.render_to_string());
 }
